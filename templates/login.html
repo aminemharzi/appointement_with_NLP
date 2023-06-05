@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block head %}
+  <meta charset="utf-8">
+	<!--
+		Perintah agar lebar viewport mengikuti lebar perangkat
+		dan skala mengikuti ukuran ketika web di-load
+	 -->
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Login Page Ep. 3</title>
+	<!-- Load bootstrap stylesheet -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+	<!-- Load login stylesheet -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/login_style.css') }}">
+
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+	{% if message %}
+        <center>
+        <div id="Message_Error">{{ message }}</div>
+        </center>
+    {% else %}
+        <p></p>
+    {% endif %}
+		<div class="card card-login">
+			<div class="card-body">
+				<div class="row justify-content-center">
+					<div class="col-lg-6 col-md-12">
+						<div class="padding bg-primary text-center align-items-center d-flex">
+							<div id="particles-js"></div>
+							<div class="w-100">
+								<div class="logo mb-4">
+									<img src="{{ url_for('static', filename='imgs/kodinger.jpg') }}" alt="kodinger logo" class="img-fluid">
+								</div>
+								<h4 class="text-light mb-2">CabMed</h4>
+								<p class="lead text-light"></p>
+								<!-- <button class="btn btn-block btn-icon btn-icon-google mb-3">
+									Login With Google
+								</button> -->
+							</div>
+
+							<!-- <div class="help-links">
+								<ul>
+									<li><a href="#">Terms of Service</a></li>
+									<li><a href="#">Privacy Policy</a></li>
+								</ul>
+							</div> -->
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-12">
+						<div class="padding">
+							<h2><b>Login</b></h2>
+							<p class="lead">Avant de commencer, vous devez vous connecter ou vous inscrire si vous n'avez pas encore de compte.</p>
+							<!-- <form autocomplete="off"> -->
+							{% if type == "med" %}
+								<form action="/login/medcin" method="post">
+									<div class="form-group">
+									<label for="username">Nom</label>
+							{% else %}
+
+							<form action="/login/patient" method="post">
+								<div class="form-group">
+									<label for="username">Email</label>
+							{% endif %}
+
+									<input type="text" name="email" class="form-control" id="username" tabindex="1">
+								</div>
+								<div class="form-group">
+									<label class="d-block" for="password">
+										Mot de passe
+
+									</label>
+									<input type="password" name="password" class="form-control" id="password" tabindex="2">
+								</div>
+								<div class="form-group text-right">
+									<div class="float-left mt-2">
+										{% if type == "med" %}
+
+										<p></p>
+										{% else %}
+
+
+										<a href="/signin/patient">Create an account?</a>
+
+										{% endif %}
+									</div>
+									<button type="submit" class="btn btn-primary" tabindex="3">
+										Login
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+{% endblock %}

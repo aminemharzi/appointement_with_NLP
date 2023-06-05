@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block head %}
+  <meta charset="utf-8">
+	<!--
+		Perintah agar lebar viewport mengikuti lebar perangkat
+		dan skala mengikuti ukuran ketika web di-load
+
+	 -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Login Page Ep. 3</title>
+	<!-- Load bootstrap stylesheet -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+	<!-- Load login stylesheet -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/login_style.css') }}">
+
+{% endblock %}
+
+{% block body %}
+
+{% if message %}
+        <center>
+        <div id="Message_Error">{{ message }}</div>
+        </center>
+    {% else %}
+        <p></p>
+    {% endif %}
+<div class="container-fluid">
+		<div class="card card-login">
+			<div class="card-body">
+				<div class="row justify-content-center">
+					<div class=" col-md-12">
+						<div class="padding">
+							<h2><b>Creation de compte</b></h2>
+							<p class="lead">Avant de commencer, vous devez vous connecter ou vous inscrire si vous n'avez pas encore de compte.</p>
+							<!-- <form autocomplete="off"> -->
+							<form action="/signin/patient" method="post">
+								<div class="form-group">
+									<label for="Nom">Nom</label>
+									<input type="text" name="nom" class="form-control" id="nom" tabindex="1">
+								</div>
+								<div class="form-group">
+									<label for="prenom">Prenom</label>
+									<input type="text" name="prenom" class="form-control" id="prenom" tabindex="1">
+								</div>
+								<div class="form-group">
+									<label for="adresse">Adresse</label>
+									<input type="text" name="adresse" class="form-control" id="adresse" tabindex="1">
+								</div>
+								<div class="form-group">
+									<label for="telephone">Telephone</label>
+									<input type="text" name="telephone" class="form-control" id="telephone" tabindex="1">
+								</div>
+								<div class="form-group">
+									<label for="age">Age</label>
+									<input type="number" name="age" class="form-control" id="age" tabindex="1" max="100">
+								</div>
+								<div class="form-group">
+									<label for="Sexe" >Sexe</label>
+									<select name="sexe" class="form-control" aria-label="Default select example" id="sexe">
+									  <option value="M">Masculin</option>
+									  <option value="F">Feminin</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label class="d-block" for="password">
+										Email
+									</label>
+									<input type="text" name="email" class="form-control" id="email" tabindex="2">
+								</div>
+								<div class="form-group">
+									<label class="d-block" for="password">
+										Mot de passe
+
+									</label>
+									<input type="password" name="password" class="form-control" id="password" tabindex="2">
+								</div>
+								<div class="form-group">
+									<label class="d-block" for="password">
+										Confirmé le mot de passe
+
+									</label>
+									<input type="password" name="confirm_pass" class="form-control" id="confirm_pass" tabindex="2">
+								</div>
+
+								<div class="form-group text-right">
+									<div class="float-left mt-2">
+										<a href="/login/patient">Login?</a>
+									</div>
+									<button type="submit" class="btn btn-primary" tabindex="3">
+										Sign in
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+{% endblock %}

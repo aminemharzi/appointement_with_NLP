@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block head %}
+  <title>Doctor Profile</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+        body {
+            font-family:Inter;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            height: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        h1 {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        .doctor-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .specialty {
+            font-size: 18px;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .personal-info {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .personal-info p {
+            margin: 5px 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100px;!important;
+            margin-bottom: 60px;
+        }
+
+        .profile-image {
+            display: block;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        btn-container {
+
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            background-color: #007bff;
+            color: #ffffff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+
+
+{% endblock %}
+
+
+{% block body%}
+
+     <div class="container">
+        <h1>Docteur Recommendez</h1>
+        <div class="doctor-name">{{ doctor_name }}</div>
+        <div class="specialty">Specialté: {{ specialite }}</div>
+        <div class="personal-info">
+            <img src="{{ url_for('static', filename='imgs/doc.jpg') }}" class="profile-image" alt="Doctor Profile Image">
+            <p>Adresse:{{ adresse }}</p>
+            <p>Ville: {{ ville }}</p>
+            <p>Telephone: {{ telephone }}</p>
+        </div>
+        <div id="map" >{{ map_html | safe }}</div>
+        <!-- You would need to add the necessary JavaScript to display the map here -->
+         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+         <center>
+             <div class="btn-container">
+                 <form action="/rendez_vous" method="post">
+            <button type="submit" class="btn">Rendez-vous</button>
+                     </form>
+        </div>
+         </center>
+
+    </div>
+
+
+
+{% endblock%}

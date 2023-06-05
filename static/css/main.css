@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+
+
+body{
+    margin:0;
+    font-family:Inter;
+
+
+
+}
+textarea {
+  width: 70%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  background: #F7F8F9;
+  /* Border */
+  border: 1px solid #E8ECF4;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family:Inter;
+  color: #000000;
+  resize: none;
+  outline: none;
+
+}
+
+.btn{
+    margin-top:30px;
+    /* Rectangle 9 */
+    width: 10%;
+    height: 50px;
+    box-sizing: border-box;
+    font-family:Inter;
+    color: white;
+    font-size: 16px;
+    background: #6F99E9;
+    /* Border */
+    border: 1px solid #E8ECF4;
+    border-radius: 8px;
+    cursor: pointer;
+
+
+}
+.au_moins{
+    margin-right:-60%;
+}
+.etat{
+   /* margin-left:-60%;*/
+}
+.loca{
+    justify-content: center;
+    display: flex;
+
+}
+.search_field{
+   display: flex;
+  align-items: center; /* Center vertically */
+   /* Optional - Center horizontally */
+  width: 40%;
+  box-sizing: border-box;
+  background: #F7F8F9;
+  /* Border */
+  border: 1px solid #E8ECF4;
+  border-radius: 8px;
+
+
+}
+.hide{
+    display: flex;
+    width: 30%;
+    margin-left:20px;
+}
+input[name='localisation']{
+
+  width: 90%;
+  font-size: 16px;
+  font-family:Inter;
+  color: #000000;
+  resize: none;
+  outline: none;
+  background: #F7F8F9;
+  padding: 12px 20px;
+  /* Border */
+  border:none;
+  border-radius: 8px;
+
+}
+.icon {
+    border: none;
+    background: #F7F8F9;
+    /* Other styles */
+    background-image: url("{{ url_for('static', filename='Icons/localization-icon.png') }}");
+    cursor:pointer;
+}
+#map {
+display: flex;
+  align-items: center; /* Center vertically */
+   /* Optional - Center horizontally */
+  width: 40%;
+
+}
+.Row{
+width:200px;
+
+
+}
+.cherche{
+
+    /* Rectangle 9 */
+    width: 30%;
+    height: 50px;
+    box-sizing: border-box;
+    font-family:Inter;
+    color: white;
+    font-size: 16px;
+    background: #6F99E9;
+    /* Border */
+    border: 1px solid #E8ECF4;
+    border-radius: 8px;
+    cursor: pointer;
+
+}
+.calender_day{
+    width: 40px;
+    height:40px;
+    font-family:Inter;
+
+    font-size: 16px;
+    background: white;
+    border: 1px solid #E8ECF4;
+    color: black;
+
+    /* Border */
+
+    border-radius: 50%;
+    cursor: pointer;
+}
+.calender_day:hover{
+    color: white;
+    background: #6F99E9;
+    border: 1px solid #E8ECF4;
+
+}
+.calender_table{
+    margin-left:-220px;
+
+}
+.leo{
+    width: 100px;
+
+}
+.select_time{
+     font-family:Inter;
+    font-size: 16px;
+    background: white;
+    border: 1px solid #E8ECF4;
+    color: black;
+    outline:none;
+    margin-top:20px;
+
+}
+.selected{
+    color: white;
+    background: #6F99E9;
+    border: 1px solid #E8ECF4;
+}
+#Message_Error{
+   margin-top: 20px;
+   width: 800px;
+   height:40px;
+
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  margin-bottom: 10px;
+
+}
+#message_succes{
+   margin-top: 20px;
+   width: 800px;
+   height:40px;
+  padding: 10px;
+  margin-bottom: 10px;
+
+   background-color: #D4EDDA;
+  border: 1px solid #C3E6CB;
+  color: #155724;
+  padding: 10px;
+  border-radius: 5px;
+
+}
+.ville_select{
+    margin-bottom: 10px;
+    font-family:Inter;
+    font-size: 16px;
+    background: white;
+    border: 1px solid #E8ECF4;
+    color: black;
+    outline:none;
+    margin-top:20px;
+}
+.ville_header{
+ margin-left: 30px;
+}
