@@ -1,6 +1,7 @@
 var searchInput = document.getElementById('searchInput');
 var list = document.getElementById('myList').getElementsByTagName('li');
 var selectedItem = document.getElementById('selectedItem');
+
 const currentDate = new Date();
 const year = currentDate.getFullYear();
 searchInput.addEventListener('input', function() {
@@ -238,15 +239,33 @@ const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toStri
     }
   });
 });*/
-function createBarGraph(weekData, month, year) {
-  var ctx = document.getElementById('appointmentChart').getContext('2d');
-  var existingChart = window.appointmentChart;
 
-  if (existingChart) {
-    existingChart.data.labels = [];
-    existingChart.data.datasets = [];
-    existingChart.update();
-  }
+var nextButton= document.getElementById('nextButton');
+var previousButton= document.getElementById('previousButton');
+var canvas = document.getElementById('appointmentChart');
+var ctx = canvas.getContext('2d');
+var existingChart = window.appointmentChart;
+function clearCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    var myChart = new Chart(ctx);
+    myChart.destroy();
+
+}
+
+// Call the clearCanvas function whenever you want to remove the previous graph
+
+
+
+function createBarGraph(data) {
+    let chartStatus = Chart.getChart("appointmentChart"); // <canvas> id
+    if (chartStatus != undefined) {
+      chartStatus.destroy();
+    }
+
+
+  weekData=data['data']
+
 
   var labels = weekData.map(function (item) {
     return item[0];
@@ -260,7 +279,7 @@ function createBarGraph(weekData, month, year) {
     data: {
       labels: labels,
       datasets: [{
-        label: 'Appointments per Week',
+        label: 'les rendez-vous par jour dans le mois '+data['month']+' en '+ data['year'],
         data: values,
         backgroundColor: 'rgba(75, 192, 192, 0.6)',
         borderColor: 'rgba(75, 192, 192, 1)',
@@ -288,7 +307,14 @@ $(document).ready(function () {
       url: '/appointments_data?month=' + month + '&year=' + year,
       type: 'GET',
       success: function (response) {
-        createBarGraph(response, month, year);
+        createBarGraph(response);
+        /*
+        nextButton.textContent=response['next_month']
+        previousButton.textContent=response['previous_month']*/
+        nextButton.className = response['next_month'];
+        previousButton.className=response['previous_month']
+        nextButton.setAttribute('year', response['year']);
+        previousButton.setAttribute('year', response['year']);
       },
       error: function (error) {
         console.log(error);
@@ -298,22 +324,15 @@ $(document).ready(function () {
 
   // Function to handle the previous month button click
   $('#previousButton').on('click', function () {
-    currentMonth--;
-    if (currentMonth < 1) {
-      currentMonth = 12;
-      currentYear--;
-    }
-    updateBarGraph(currentMonth, currentYear);
+
+
+    updateBarGraph(previousButton.className,2023);
   });
 
   // Function to handle the next month button click
   $('#nextButton').on('click', function () {
-    currentMonth++;
-    if (currentMonth > 12) {
-      currentMonth = 1;
-      currentYear++;
-    }
-    updateBarGraph(currentMonth, currentYear);
+
+    updateBarGraph(nextButton.className, 2023);
   });
 
   // Fetch the current month and year

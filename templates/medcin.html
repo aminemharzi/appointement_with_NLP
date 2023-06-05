@@ -264,6 +264,33 @@
     color:white;
 
     }
+    #nextButton{
+    background-color:rgba(75, 192, 192, 0.6);
+
+    color: #fff;
+    border:none;
+    border-radius:10px;
+    padding:10px;
+    min-height:20px;
+    font-weight: bold;
+    min-width: 100px;
+    font-size: 16px;
+
+    }
+
+    #previousButton{
+     background-color:#0a0a23;
+     font-weight: bold;
+    color: #fff;
+    border:none;
+    border-radius:10px;
+    padding:10px;
+    min-height:20px;
+    min-width: 100px;
+    font-size: 16px;
+
+    }
+
 
 
 
@@ -275,7 +302,7 @@
 {% block body%}
     <div class="container1">
         <div class="row_1">
-            <center><h1 id="selectedItem">{{ full_name }}</h1></center>
+            <h2 id="selectedItem">{{ full_name }}</h2>
 
                 <p>Etat de patient</p>
             {% if description_patient %}
@@ -371,10 +398,14 @@
             </div>
             <div class="">
                 <canvas id="appointmentChart"></canvas>
+                <br>
+                <center>
+                    <button id="previousButton">mois dernier</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button id="nextButton">mois suivant</button>
+                </center>
 
-                <button id="previousButton">Previous Week</button>
-                <button id="nextButton">Next Week</button>
-                <canvas id="barChart"></canvas>
+
 
 
 

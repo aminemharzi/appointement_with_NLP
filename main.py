@@ -17,7 +17,6 @@ db = SQLAlchemy(app)
 secret_key = secrets.token_hex(16)
 app.secret_key =secret_key
 
-print(secret_key)
 
 #Les table dans la base de données
 class Patient(db.Model):
@@ -32,6 +31,8 @@ class Patient(db.Model):
     sexe = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), nullable=False)
     password = db.Column(db.String(200), nullable=False)
+    long_pat = db.Column(db.String(255), nullable=False)
+    lat_pat = db.Column(db.String(255), nullable=False)
 
     def __repr__(self):
         return f'<Patient {self.nom}>'
@@ -119,12 +120,14 @@ def get_list_speciality(text):
         class_label = pipeline.classes_[i]
         class_labels.append(class_label)
         test = str(class_prob * 100).split('.')[0]
-        class_probs.append(test+"%")
+        class_probs.append(class_prob)
     proba_df = pd.DataFrame({
         'Label': class_labels,
         'Proba': class_probs
     })
-    return  proba_df.sort_values(by='Proba', ascending=False)[:6]
+    sorted_df = proba_df.sort_values(by='Proba', ascending=False)
+    sorted_df['Proba'] = (sorted_df['Proba'] * 100).astype(int)
+    return  sorted_df[:6]
 
 
 
@@ -151,7 +154,7 @@ def find_nearest_doctor(patient_lat, patient_lon, df):
     return nearest_doctor
 
 def localisation(lat, lon):
-    user_location = 'you'
+    user_location = 'toi'
 
     # create a map with the location marker
     map = folium.Map(location=[lat, lon], zoom_start=13)
@@ -161,7 +164,7 @@ def localisation(lat, lon):
     return map_html
 def near_localisation(lat, lon, another_lat,another_lon, name):
 
-    user_location = 'you'
+    user_location = 'toi'
     # create a map with the location marker
     map = folium.Map(location=[lat, lon], zoom_start=13)
     folium.Marker([lat, lon], popup=user_location).add_to(map)
@@ -288,17 +291,16 @@ def index():
         longetude=float(request.form['long'])
         ville_selected=request.form['ville']
         verification = description.split(" ")
-        if len(verification)< 4:
+        if len(verification)< 10:
             latitude = 33.589886
             longitude = -7.603869
-            user_location = 'you'
             lat, lon = latitude, longitude
             # create a map with the location marker
 
             map_html = localisation(lat, lon)
             now = datetime.datetime.now()
             month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month,now.year)
-            message = "merci de remplir tous les champs"
+            message = "le longeur de Texte est pas favorable merci de bien remplir le champs"
             return render_template('index.html', month=month, year=year,
                                    prev_month=prev_month, prev_year=prev_year,
                                    next_month=next_month, next_year=next_year,
@@ -397,6 +399,17 @@ def index():
 
                     map_html=near_localisation(latitude, longetude, float(another_lat), float(another_lon), name)
                     predicted_speciality = pipeline.predict([description])[0]
+                    patient = Patient.query.filter_by(email=session['email']).first()
+
+                    # Update the values
+                    print("lan ", latitude)
+                    print("lan ", longetude)
+                    patient.long_pat = str(longetude)
+                    patient.lat_pat = str(latitude)
+
+                    # Commit the changes to the database
+                    db.session.commit()
+
                     session['id_med']=id_me
                     session['description_maladie']=description
                     session['Date_rdv']=date_selectionne+" "+heure_selectionne
@@ -570,7 +583,6 @@ def medcin():
     month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month, now.year)
     cal = calendar.monthcalendar(year, month)
     # Organize the rendezvous dates into a structure that aligns with the calendar template
-
 
     weeks = []
     for week in cal:
@@ -754,6 +766,7 @@ def appointments_data():
     now = datetime.datetime.now()
     month = int(request.args.get('month', now.month))
     year = int(request.args.get('year', now.year))
+    month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(month,year)
 
 
     cal = calendar.monthcalendar(year, month)
@@ -793,10 +806,18 @@ def appointments_data():
                     formatted_week.append({'day': day, 'has_rendezvous': False})
                     my_data.append((day, 0))
         weeks.append(formatted_week)
+        js={
+            'next_year':year+1,
+            'previous_year':year-1,
+            'next_month':next_month,
+            'previous_month':prev_month,
+            'month':month,
+            'year':year,
+            'data':my_data
 
+        }
 
-    print("My data", my_data)
-    return jsonify(my_data)  # Return the data as JSON
+    return jsonify(js)  # Return the data as JSON
 
 @app.route('/login/patient', methods=['POST', 'GET'])
 def login_patient():
@@ -846,7 +867,9 @@ def Signin_patient():
                 age=age,
                 sexe=sexe,
                 email=email,
-                password=password
+                password=password,
+                long_pat="",
+                lat_pat=""
             )
             db.session.add(new_patient)
             db.session.commit()
