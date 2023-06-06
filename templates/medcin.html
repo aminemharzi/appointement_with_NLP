@@ -356,44 +356,9 @@
     </div>
 <div class="container2">
             <div class="">
-                <div class="calender_table">
-            <h1>Jour de rendez vous</h1>
-            <h2 id="year_month">{{ month }}-{{ year }}</h2>
-
-            <a href="/medcin/{{ id_patient }}?month={{ prev_month }}&year={{ prev_year }}">Précédente</a>
-            <a href="/medcin/{{ id_patient }}?month={{ next_month }}&year={{ next_year }}">Suivante</a>
-
-            <table>
-                <tr>
-                    <th>Lun</th>
-                    <th>Mar</th>
-                    <th>Mer</th>
-                    <th>Jeu</th>
-                    <th>Ven</th>
-                    <th>Sam</th>
-                    <th>Dim</th>
-                </tr>
-
-                {% for week in weeks %}
-                    <tr>
-                        {% for day in week %}
-                            {% if day != "" %}
-                                <td>
-                                    {% if day.has_rendezvous %}
-                                        <button type="button" class="calender_day has_rendezvous" onclick="handleDayClick(this,{{ day.appointments }});" >{{ day.day }}</button>
-
-                                    {% else %}
-                                        <button type="button" class="calender_day" >{{ day.day }}</button>
-                                    {% endif %}
-                                </td>
-                            {% else %}
-                                <td>{{ day }}</td>
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            </table>
-            </div>
+                <div id="map">
+                    {{ map_html | safe }}
+                </div>
 
             </div>
             <div class="">

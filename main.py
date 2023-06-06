@@ -31,8 +31,8 @@ class Patient(db.Model):
     sexe = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), nullable=False)
     password = db.Column(db.String(200), nullable=False)
-    long_pat = db.Column(db.String(255), nullable=False)
-    lat_pat = db.Column(db.String(255), nullable=False)
+    long_pat = db.Column(db.String(200), nullable=True)
+    lat_pat = db.Column(db.String(200), nullable=True)
 
     def __repr__(self):
         return f'<Patient {self.nom}>'
@@ -94,7 +94,7 @@ class RendezVous(db.Model):
 
     id_med = db.Column(db.Integer, db.ForeignKey('doctor.id_med'), primary_key=True)
     id_patient = db.Column(db.Integer, db.ForeignKey('patient.id_patient'), primary_key=True)
-    description_maladie = db.Column(db.String(350), nullable=False)
+    description_maladie = db.Column(db.String(5000), nullable=False)
     date_rdv = db.Column(db.TIMESTAMP, nullable=False)
     doctor_rel = db.relationship('Doctor', backref='rendez_vous')
     patient_rel = db.relationship('Patient', backref='rendez_vous')
@@ -169,6 +169,25 @@ def near_localisation(lat, lon, another_lat,another_lon, name):
     map = folium.Map(location=[lat, lon], zoom_start=13)
     folium.Marker([lat, lon], popup=user_location).add_to(map)
     folium.Marker([another_lat, another_lon], popup=name, icon=folium.Icon(color="red")).add_to(map)
+    map_html = map._repr_html_()
+    return map_html
+
+def doc_loca():
+
+    user_location = 'toi'
+    # create a map with the location marker
+    medcin = Doctor.query.filter_by(id_med=session['id_doc']).first()
+
+    map = folium.Map(location=[medcin.latitude, medcin.longitude], zoom_start=13)
+    folium.Marker([medcin.latitude, medcin.longitude], popup=user_location).add_to(map)
+    rendezvous_data = RendezVous.query.filter_by(id_med=session['id_doc']).all()
+    for element in rendezvous_data:
+        try:
+
+            folium.Marker([float(element.patient_rel.lat_pat), float(element.patient_rel.long_pat)], popup=element.patient_rel.nom+" "+element.patient_rel.prenom, icon=folium.Icon(color="red")).add_to(map)
+        except Exception as e :
+            print(e)
+
     map_html = map._repr_html_()
     return map_html
 
@@ -402,8 +421,7 @@ def index():
                     patient = Patient.query.filter_by(email=session['email']).first()
 
                     # Update the values
-                    print("lan ", latitude)
-                    print("lan ", longetude)
+
                     patient.long_pat = str(longetude)
                     patient.lat_pat = str(latitude)
 
@@ -456,105 +474,6 @@ def index():
         except Exception as e :
             print(e)
             return "Il y a un erreur"
-'''
-@app.route('/medcin')
-def medcine():
-    try:
-        session['id_doc']
-    except Exception as e:
-        return redirect('/login/medcin')
-
-    try:
-        now = datetime.datetime.now()
-        month = int(request.args.get('month', now.month))
-        year = int(request.args.get('year', now.year))
-        rendezvous_data = RendezVous.query.filter_by(id_med=session['id_doc']).order_by(
-            RendezVous.date_rdv.desc()).all()
-
-
-        # Fetch patient names for each RendezVous record
-
-        rendezvous_dates = {}
-        for rendezvous in rendezvous_data:
-            date = rendezvous.date_rdv.date()
-            if date not in rendezvous_dates:
-                rendezvous_dates[date] = []
-            rendezvous_dates[date].append(rendezvous)
-
-        speciality_percent = get_list_speciality(rendezvous_data[0].description_maladie)
-        month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(month, year)
-        cal = calendar.monthcalendar(year, month)
-        # Organize the rendezvous dates into a structure that aligns with the calendar template
-
-        weeks = []
-        for week in cal:
-            formatted_week = []
-            for day in week:
-                if day == 0:
-                    formatted_week.append('')
-                else:
-                    date_to_check = datetime.date(year, month, day)
-                    if date_to_check in rendezvous_dates:
-                        appointments = rendezvous_dates[date_to_check]
-                        appointments_info = []
-                        for appointment in appointments:
-                            patient_name = appointment.patient_rel.nom + " " + appointment.patient_rel.prenom
-                            rdv_temps = appointment.date_rdv.time()
-                            rdv_temps_str = rdv_temps.strftime('%H:%M')
-                            appointments_info.append({'patient_name': patient_name, 'temps': rdv_temps_str})
-
-                        formatted_week.append({'day': day, 'has_rendezvous': True, 'appointments': appointments_info})
-                    else:
-                        formatted_week.append({'day': day, 'has_rendezvous': False})
-            weeks.append(formatted_week)
-
-        return render_template('medcin.html', weeks=weeks, month=month, year=year, prev_month=prev_month,
-                               prev_year=prev_year, next_month=next_month, next_year=next_year,
-                               rendezvous_data=rendezvous_data,
-                               speciality_percent=speciality_percent)
-    except Exception as e:
-
-        rendezvous_data = RendezVous.query.filter_by(id_med=session['id_doc']).order_by(RendezVous.date_rdv.desc()).all()
-        # Fetch patient names for each RendezVous record
-        rendezvous_dates = {}
-        for rendezvous in rendezvous_data:
-            date = rendezvous.date_rdv.date()
-            if date not in rendezvous_dates:
-                rendezvous_dates[date] = []
-            rendezvous_dates[date].append(rendezvous)
-
-        speciality_percent=get_list_speciality(rendezvous_data[0].description_maladie)
-
-        now = datetime.datetime.now()
-        month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month, now.year)
-        cal = calendar.monthcalendar(year, month)
-        # Organize the rendezvous dates into a structure that aligns with the calendar template
-
-        weeks = []
-        for week in cal:
-            formatted_week = []
-            for day in week:
-                if day == 0:
-                    formatted_week.append('')
-                else:
-                    date_to_check = datetime.date(year, month, day)
-                    if date_to_check in rendezvous_dates:
-                        appointments = rendezvous_dates[date_to_check]
-                        appointments_info = []
-                        for appointment in appointments:
-                            patient_name = appointment.patient_rel.nom + " "+ appointment.patient_rel.prenom
-                            rdv_temps = appointment.date_rdv.time()
-                            rdv_temps_str = rdv_temps.strftime('%H:%M')
-                            appointments_info.append({'patient_name': patient_name, 'temps': rdv_temps_str})
-
-                        formatted_week.append({'day': day, 'has_rendezvous': True, 'appointments': appointments_info})
-                    else:
-                        formatted_week.append({'day': day, 'has_rendezvous': False})
-            weeks.append(formatted_week)
-
-        return render_template('medcin.html', weeks=weeks, month=month, year=year, prev_month=prev_month,
-                               prev_year=prev_year, next_month=next_month, next_year=next_year, rendezvous_data=rendezvous_data,
-                               speciality_percent=speciality_percent)'''
 
 @app.route('/medcin', methods=['GET'])
 def medcin():
@@ -583,6 +502,7 @@ def medcin():
     month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month, now.year)
     cal = calendar.monthcalendar(year, month)
     # Organize the rendezvous dates into a structure that aligns with the calendar template
+    map_html=doc_loca()
 
     weeks = []
     for week in cal:
@@ -615,7 +535,8 @@ def medcin():
     return render_template('medcin.html', weeks=weeks, month=month, year=year, prev_month=prev_month,
                            prev_year=prev_year, next_month=next_month, next_year=next_year,
                            rendezvous_data=rendezvous_data,
-                           speciality_percent=speciality_percent,full_name=full_name, id_patient=rendezvous_data[0].id_patient)
+                           speciality_percent=speciality_percent,full_name=full_name, id_patient=rendezvous_data[0].id_patient,
+                           map_html=map_html)
 
 
 
@@ -633,7 +554,9 @@ def medcin_with_id(id_patient):
 
 
 
+
     try:
+        map_html = doc_loca()
         now = datetime.datetime.now()
         month = int(request.args.get('month', now.month))
         year = int(request.args.get('year', now.year))
@@ -680,7 +603,7 @@ def medcin_with_id(id_patient):
                                prev_year=prev_year, next_month=next_month, next_year=next_year,
                                rendezvous_data=rendezvous_data, full_name=full_name,
                                speciality_percent=speciality_percent,
-                               description_patient=selected_patient.description_maladie, id_patient=id_patient)
+                               description_patient=selected_patient.description_maladie, id_patient=id_patient,map_html=map_html)
 
 
 
@@ -731,7 +654,8 @@ def medcin_with_id(id_patient):
         return render_template('medcin.html', weeks=weeks, month=month, year=year, prev_month=prev_month,
                                prev_year=prev_year, next_month=next_month, next_year=next_year,
                                rendezvous_data=rendezvous_data,full_name=full_name,
-                               speciality_percent=speciality_percent, description_patient=selected_patient.description_maladie, id_patient=id_patient)
+                               speciality_percent=speciality_percent, description_patient=selected_patient.description_maladie,
+                               id_patient=id_patient,map_html=map_html)
 
 
 @app.route('/login/medcin', methods=['POST', 'GET'])
@@ -884,6 +808,16 @@ def Signin_patient():
         return render_template('sign_in.html')
 @app.route("/rendez_vous", methods =['GET', 'POST'])
 def rendez_vous():
+    now = datetime.datetime.now()
+    latitude = 33.589886
+    longitude = -7.603869
+    user_location = 'you'
+    lat, lon = latitude, longitude
+    # create a map with the location marker
+    map = folium.Map(location=[lat, lon], zoom_start=13)
+    folium.Marker([lat, lon], popup=user_location).add_to(map)
+    map_html = map._repr_html_()
+    month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month, now.year)
     if request.method=='POST':
         try:
 
@@ -891,6 +825,8 @@ def rendez_vous():
             email =session['email']
             date_rdv=session['Date_rdv']
             description_demandee= session['description_maladie']
+
+
 
             patient = Patient.query.filter_by(email=email).first()
             if patient:
@@ -901,16 +837,23 @@ def rendez_vous():
                 db.session.add(rendez_vous)
                 db.session.commit()
 
-                return jsonify({"message":"le rendez vous est bien enregitré"})
+
+                return render_template('index.html', month=month, year=year,
+                                       prev_month=prev_month, prev_year=prev_year,
+                                       next_month=next_month, next_year=next_year,
+                                       weeks=weeks, map_html=map_html,message_succes="Votre rendez-vous est bien enregistré")
+
             else:
-                return jsonify({"message":"Votre session expiré"})
+                 return redirect('/login/patient')
         except Exception as e :
             print(e)
             return jsonify({"message":"Il y a un erreur" +e})
 
     else:
-        return ""
-
+        return render_template('index.html', month=month, year=year,
+                               prev_month=prev_month, prev_year=prev_year,
+                               next_month=next_month, next_year=next_year,
+                               weeks=weeks, map_html=map_html, message="Il y a un probleme")
 
 
 
