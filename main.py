@@ -105,7 +105,7 @@ class RendezVous(db.Model):
 
 pipeline = joblib.load('model/pipeline.pkl')
 dabadoc_doctors = pd.read_excel("DabaDoc_Abonnee.xlsx", engine='openpyxl')
-listes_rdv = pd.read_excel("listes_rdv.xlsx", engine='openpyxl')
+listes_rdv = pd.read_excel("list_rdv_total.xlsx", engine='openpyxl')
 
 def get_list_speciality(text):
     predicted_speciality = pipeline.predict([text])[0]

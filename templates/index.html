@@ -28,7 +28,7 @@
                 var inputLong = document.getElementById('long');
                 inputLat.value = latitude;
                 inputLong.value = longitude;
-                var user_location = 'you';
+                var user_location = 'toi';
 
                 // Create a map with the location marker
                 var map = L.map('map', {
@@ -40,6 +40,10 @@
                 }).addTo(map);
                 map.dragging.enable();
                 L.marker([latitude, longitude]).addTo(map).bindPopup(user_location).openPopup();
+                var inputElement = document.getElementById('localisation');
+
+                  // Update the placeholder attribute
+                  inputElement.placeholder = "Votre cordonné sont : "+latitude+" , "+ longitude;
 
 
 
