@@ -33,7 +33,7 @@
            padding:20px;
            height: 60vh;
           display: grid;
-          grid-template-columns: 50% 50%;
+          grid-template-columns: 40% 10% 50%;
 
 
         }
@@ -342,7 +342,8 @@
             
             <div class="spec spec1">
                 <p><b>{{ row['Label'] }}</b></p>
-                <img src="{{ url_for('static', filename='icons/icon.png') }}" class="profile-image" alt="Doctor Profile Image">
+                {% set url = url_for('static', filename='icons/'+row['Label']+'.png') %}
+                <img src="{{ url }}" class="profile-image" onerror="this.onerror=null; this.src='{{ url_for('static', filename='icons/ico.png') }}';" alt="Doctor Profile Image">
                 <br><br>
                 <p><b>{{ row['Proba'] }}</b></p>
             </div>
@@ -359,6 +360,9 @@
                 <div id="map">
                     {{ map_html | safe }}
                 </div>
+
+            </div>
+            <div>
 
             </div>
             <div class="">

@@ -283,6 +283,7 @@ function createBarGraph(data) {
         data: values,
         backgroundColor: 'rgba(75, 192, 192, 0.6)',
         borderColor: 'rgba(75, 192, 192, 1)',
+        //backgroundColor: '#1C1E53',
         borderWidth: 1
       }]
     },
