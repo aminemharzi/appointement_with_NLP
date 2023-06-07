@@ -121,31 +121,8 @@ width:200px;
     cursor: pointer;
 
 }
-.calender_day{
-    width: 40px;
-    height:40px;
-    font-family:Inter;
 
-    font-size: 16px;
-    background: white;
-    border: 1px solid #E8ECF4;
-    color: black;
 
-    /* Border */
-
-    border-radius: 50%;
-    cursor: pointer;
-}
-.calender_day:hover{
-    color: white;
-    background: #6F99E9;
-    border: 1px solid #E8ECF4;
-
-}
-.calender_table{
-    margin-left:-220px;
-
-}
 .leo{
     width: 100px;
 
@@ -160,11 +137,7 @@ width:200px;
     margin-top:20px;
 
 }
-.selected{
-    color: white;
-    background: #6F99E9;
-    border: 1px solid #E8ECF4;
-}
+
 #Message_Error{
    margin-top: 20px;
    width: 800px;
@@ -204,4 +177,60 @@ width:200px;
 }
 .ville_header{
  margin-left: 30px;
+}
+
+
+.calender_day{
+    width: 40px;
+    height:40px;
+    font-family:Inter;
+    font-size: 14px;
+    font-weight: bold;
+    background: white;
+    border: none;
+    color: black;
+
+    /* Border */
+
+    border-radius: 50%;
+    cursor: pointer;
+}
+.calender_day:hover{
+    color: white;
+    background: #6F99E9;
+    background: #0081C6;
+    /*border: 1px solid #E8ECF4;*/
+
+}
+.calender_table{
+    margin-left:-220px;
+    border: 1px solid #E8ECF4;
+    padding:10px;
+
+}
+
+.calender_header{
+    display:flex;
+    justify-content:space-between;
+    height: 40px;
+
+}
+
+.calender_header h3{
+    margin-top:0px;
+
+}
+
+.calender_header a{
+height: auto;
+}
+.selected{
+    color: white;
+    background: #0081C6;
+    border: 1px solid #E8ECF4;
+}
+.calender_body th{
+    color: grey;
+     font-size: 15px;
+
 }

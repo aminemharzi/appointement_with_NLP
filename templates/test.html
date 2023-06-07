@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Login Page Ep. 3</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+	<!-- Load bootstrap stylesheet -->
+
+
+
+</head>
+<body>
+
+    <div class="dark-background">
+        {% if message %}
+        <center>
+        <div id="Message_Error">{{ message }}</div>
+        </center>
+    {% elif  message_succes %}
+         <center>
+        <div id="message_succes">{{ message_succes }}</div>
+        </center>
+    {% else %}
+        <p></p>
+    {% endif %}
+
+    </div>
+<form action="/patient" method="post">
+    <div class="container">
+      <div class="main">
+          <div class="titre">
+              <h2>Chercher rendez-vous</h2>
+
+          </div>
+
+            <div class="part1">
+                <div class="form-group">
+                    <label for="select_time" >Heure</label>
+                    <select  id="select_time" name="heure" class="form-control" aria-label="Default select example" >
+
+                            <option value="09:00">09:00</option>
+                            <option value="09:15">09:15</option>
+                            <option value="09:30">09:30</option>
+                            <option value="09:45">09:45</option>
+                            <option value="10:00">10:00</option>
+                            <option value="10:15">10:15</option>
+                            <option value="10:30">10:30</option>
+                            <option value="10:45">10:45</option>
+                            <option value="11:00">11:00</option>
+                             <option value="11:15">11:15</option>
+                            <option value="11:30">11:30</option>
+                            <option value="11:45">11:45</option>
+                            <option value="12:00">12:00</option>
+                            <option value="12:15">12:15</option>
+                            <option value="12:30">12:30</option>
+                            <option value="12:45">12:45</option>
+                            <option value="13:00">13:00</option>
+                            <option value="13:15">13:15</option>
+                            <option value="13:30">13:30</option>
+                            <option value="13:45">13:45</option>
+                             <option value="14:00">14:00</option>
+                            <option value="14:15">14:15</option>
+                            <option value="14:30">14:30</option>
+                            <option value="14:45">14:45</option>
+                             <option value="15:00">15:00</option>
+                            <option value="15:15">15:15</option>
+                            <option value="15:30">15:30</option>
+                            <option value="15:45">15:45</option>
+                             <option value="16:00">16:00</option>
+                            <option value="16:15">16:15</option>
+                            <option value="16:30">16:30</option>
+                            <option value="16:45">16:45</option>
+                             <option value="17:00">17:00</option>
+                            <option value="17:15">17:15</option>
+                            <option value="17:30">17:30</option>
+                            <option value="17:45">17:45</option>
+
+                    </select>
+                </div>
+                <div class="calender_table">
+                <div class="calender_header">
+
+                    <a href="/patient?month={{ prev_month }}&year={{ prev_year }}"><img  src="{{ url_for('static', filename='Icons/back.png') }}" alt="Search"/></a>
+                     <h3 id="year_month" date="{{ month }}-{{ year }}">{{ month_name }} {{ year }}</h3>
+                    <a href="/patient?month={{ next_month }}&year={{ next_year }}"><img  src="{{ url_for('static', filename='Icons/next.png') }}" alt="Search"/></a>
+
+                </div>
+
+
+
+                <table class="calender_body">
+                    <tr>
+                        <th>Lun</th>
+                        <th>Mar</th>
+                        <th>Mer</th>
+                        <th>Jeu</th>
+                        <th>Ven</th>
+                        <th>Sam</th>
+                        <th>Dim</th>
+                    </tr>
+
+                    {% for week in weeks %}
+
+                        <tr>
+                            {% for day in week %}
+                                {% if day != "" %}
+                                    <td><button type="button" class="calender_day" onclick="handleDayClick(this)">{{ day }}</button></td>
+                                {% else %}
+                                    <td>{{ day }}</td>
+                                {% endif%}
+
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+                </div>
+
+            </div>
+            <div class="part2">
+
+                <div class="form-group">
+                    <label >localisation</label>
+                    <div class="form-control locali">
+                        <p id="localisation">Merci de clique sur la boutton pour récuprer votre localisation -></p>
+                        <button class="icon" type="button" onclick="getLocation()"><img  src="{{ url_for('static', filename='Icons/localization-icon.png') }}" alt="Search"/></button>
+                    </div>
+
+
+                </div>
+                <div class="form-group">
+                    <label for="select_time" >Heure</label>
+                    <select  id="search_city_id" name="ville" class="form-control">
+
+                            <option value="">Choisir une ville</option>
+                            <option value="Agadir">Agadir</option>
+                            <option value="Ait Melloul">Ait Melloul</option>
+                            <option value="Arfoud">Arfoud</option>
+                            <option value="Azrou">Azrou</option>
+                            <option value="Benguérir">Benguérir</option>
+                            <option value="Beni Mellal">Beni Mellal</option>
+                            <option value="Benslimane">Benslimane</option>
+                            <option value="Berkane">Berkane</option>
+                            <option value="Berrechid">Berrechid</option>
+                            <option value="Bouskoura">Bouskoura</option>
+                            <option value="Bouznika">Bouznika</option>
+                            <option value="Casablanca">Casablanca</option>
+                            <option value="Dakhla">Dakhla</option>
+                            <option value="Dar Bouazza">Dar Bouazza</option>
+                            <option value="Deroua">Deroua </option>
+                            <option value="El Jadida">El Jadida</option>
+                            <option value="Errachidia">Errachidia</option>
+                            <option value="Essaouira">Essaouira</option>
+                            <option value="Fkih Ben Saleh">Fkih Ben Saleh</option>
+                            <option value="Fès">Fès</option>
+                            <option value="Had Soualem">Had Soualem</option>
+                            <option value="Ifrane">Ifrane</option>
+                            <option value="Inezgane">Inezgane</option>
+                            <option value="Kalaat Sraghna">Kalaat Sraghna </option>
+                            <option value="Khemisset">Khemisset</option>
+                            <option value="Khouribga">Khouribga</option>
+                            <option value="Khénifra">Khénifra</option>
+                            <option value="Kénitra">Kénitra</option>
+                            <option value="Larache">Larache</option>
+                            <option value="Laâyoune">Laâyoune</option>
+                            <option value="Marrakech">Marrakech</option>
+                            <option value="Mechra Bel Ksiri">Mechra Bel Ksiri</option>
+                            <option value="Meknès">Meknès</option>
+                            <option value="Mohammedia">Mohammedia</option>
+                            <option value="Médiouna">Médiouna</option>
+                            <option value="Nador">Nador</option>
+                            <option value="Ouarzazate">Ouarzazate</option>
+                            <option value="Oujda">Oujda</option>
+                            <option value="Rabat">Rabat</option>
+                            <option value="Safi">Safi</option>
+                            <option value="Saidia">Saidia</option>
+                            <option value="Sala Al Jadida">Sala Al Jadida</option>
+                            <option value="Salé">Salé</option>
+                            <option value="Settat">Settat</option>
+                            <option value="Sidi Bennour">Sidi Bennour</option>
+                            <option value="Sidi Kacem">Sidi Kacem</option>
+                            <option value="Skhirat">Skhirat</option>
+                            <option value="Séfrou">Séfrou</option>
+                            <option value="Tanger">Tanger</option>
+                            <option value="Taroudant">Taroudant</option>
+                            <option value="Tata">Tata</option>
+                            <option value="Taza">Taza</option>
+                            <option value="Temara">Temara</option>
+                            <option value="Tétouan">Tétouan</option>
+
+                    </select>
+                </div>
+                 <div class="form-group">
+                    <label for="description_maladie">Description de maladie</label>
+                    <textarea id="description_maladie" name="description_maladie" class="form-control" placeholder="Veuillez décrire vos symptômes..." rows="7"></textarea>
+
+                </div>
+                    <br><br>
+                <button type="submit" class="btn btn-primary" tabindex="3">
+                    Enregistré
+                </button>
+
+            </div>
+
+
+      </div>
+    </div>
+    <div id="successMessage">
+                <input type="text" name="long" id="long"  value="" hidden="hidden">
+                <input type="text" name="lat" id="lat"  value="" hidden="hidden">
+                 <input type="text" name="date" id="date"  value="" hidden="hidden">
+               <!-- <input type="text" name="heure" id="heure"  value="" hidden="hidden">-->
+                <!--<input type="text" name="ville" id="ville" value="" hidden="hidden">-->
+
+    </div>
+    </form>
+
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+</body>
+</html>

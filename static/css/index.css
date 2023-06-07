@@ -1,0 +1,171 @@
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+
+
+  body{
+      margin:0;
+      font-family:Inter;
+
+  }
+  .container{
+
+    display:flex;
+     justify-content: center;
+  }
+    .main{
+
+       margin-top: -250px;
+      display:grid;
+      grid-template-columns: 40% 60%;
+      grid-template-rows: 10% 90%;
+      grid-template-areas:
+            "titre titre"
+            "part1 part2";
+      width:100%;
+      height:540px;
+      background: white;
+      border: 1px solid #E8ECF4;
+
+    }
+    .part1{
+        grid-area: part1;
+        padding:20px;
+        font-weight: bold;
+         border: 1px solid #f6f6f6;
+
+    }
+    .part2{
+    grid-area: part2;
+    padding:20px;
+    font-weight: bold;
+    background: #fafafa;
+     border: 1px solid #f6f6f6;
+
+
+    }
+   .titre{
+   display:flex;
+   justify-content:center;
+    padding:10px;
+    grid-area: titre;
+    font-weight: bold;
+
+   }
+
+.calender_day{
+    width: 40px;
+    height:40px;
+    font-family:Inter;
+    font-size: 14px;
+    font-weight: bold;
+    background: white;
+    border: none;
+    color: black;
+
+    /* Border */
+
+    border-radius: 50%;
+    cursor: pointer;
+}
+.calender_day:hover{
+    color: white;
+    background: #6F99E9;
+    background: #0081C6;
+    /*border: 1px solid #E8ECF4;*/
+
+}
+.calender_table{
+   margin-top:50px;
+    border: 1px solid #E8ECF4;
+    padding:10px;
+
+}
+
+.calender_header{
+    display:flex;
+    justify-content:space-between;
+    height: 40px;
+
+}
+
+.calender_header h3{
+    margin-top:0px;
+
+}
+
+.calender_header a{
+height: auto;
+}
+.selected{
+    color: white;
+    background: #0081C6;
+    border: 1px solid #E8ECF4;
+}
+.calender_body th{
+    color: grey;
+     font-size: 15px;
+
+}
+.locali{
+    display:flex;
+     justify-content:space-between;
+
+
+}
+.icon{
+     border: none;
+    background: white;
+     cursor:pointer;
+
+}
+
+.dark-background {
+  background-image: url("../imgs/doctors.jpg");
+  background-color: rgba(0, 0, 0, 0.5); /* Adjust the last value (0.5) to control the darkness */
+  background-blend-mode: multiply; /* Enhances the darkening effect */
+  width:100%;
+  height:70vh;
+  background-attachment: fixed;
+  background-size: cover;
+}
+#localisation{
+    font-size: 14px;
+
+
+
+}
+.part2 div{
+margin-bottom:15px;
+}
+.part2 div:nth-child(3){
+margin-bottom:0px;
+}
+
+
+
+#Message_Error{
+   margin-top: 20px;
+   width: 800px;
+   height:40px;
+
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  margin-bottom: 10px;
+
+}
+#message_succes{
+   margin-top: 20px;
+   width: 800px;
+   height:40px;
+  padding: 10px;
+  margin-bottom: 10px;
+
+   background-color: #D4EDDA;
+  border: 1px solid #C3E6CB;
+  color: #155724;
+  padding: 10px;
+  border-radius: 5px;
+
+}

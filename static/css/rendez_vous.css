@@ -1,0 +1,180 @@
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+
+
+  body{
+      margin:0px;
+      padding:0px;
+      font-family:Inter;
+
+  }
+
+    .container_1{
+
+      display:grid;
+      grid-template-columns:25% 50% 25%;
+      grid-template-rows:25% 75%;
+      width:100%;
+      height:100vh;
+      background: #fafafa;
+      grid-template-areas:
+            "background background background"
+            "profile_details main localisation_details";
+
+    }
+   .background{
+
+    grid-area: background;
+     background-image: url("../imgs/doctors.jpg");
+      background-size: cover;
+      background-color: rgba(0, 0, 0, 0.5); /* Adjust the last value (0.5) to control the darkness */
+      background-blend-mode: multiply;
+
+
+   }
+  .profile_details{
+    grid-area: profile_details;
+  display:flex;
+    padding:20px;
+  justify-content: flex-start;
+  align-items: center;
+   flex-direction:column;
+
+
+
+
+  }
+  .main{
+  grid-area: main;
+  padding:20px;
+
+  }
+ .localisation_details{
+    padding:10px;
+ grid-area: localisation_details;
+
+ }
+
+ .profile-image {
+
+
+            width: 150px;
+            height: 150px;
+
+            border-radius: 50%;
+            border: 1px solid white;
+            object-fit: cover;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top:-80px;
+
+
+        }
+  .profile_details p{
+     font-size: 14px;
+     color:#a7a6a9;
+
+
+  }
+  .spescialty{
+    width:100%;
+    height:150px;
+    background:white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .spescialty_header{
+  padding-top:10px;
+   padding-left:10px;
+   font-size: 18px;
+
+
+
+  }
+ .specialite_elements{
+
+    display:flex;
+    flex-wrap: wrap;
+
+ }
+ .specialite_elements > div{
+    flex: 0 0 33.333333%;
+
+    display:flex;
+    padding-left:10px;
+
+ }
+ .spe_icon{
+    width:15px;
+    height:16px;
+
+
+ }
+ .details_patient{
+
+    margin-top:10px;
+    width:100%;
+    height:300px;
+    background:white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+
+ }
+ .cards{
+    display:flex;
+
+    justify-content: space-around;
+ }
+ .spec1{
+
+            justify-content:center;
+           padding:10px;
+           white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color:white;
+            width:30%;
+
+
+
+
+ }
+ .spec1:nth-child(1){
+    background: #9E366B;
+
+}
+.spec1:nth-child(2){
+    background: #5554DB;
+
+}
+.spec1:nth-child(3){
+    background: #FFA873;
+
+ }
+ .rating{
+ padding-top:10px;
+ display:flex;
+
+ }
+
+ .star_icon{
+    width:25px;
+    height:25px;
+
+ }
+.rating_text{
+    font-size: 18px;
+    color: #ffa000;
+}
+.map{
+    width:100%;
+    height:70%;
+    background:white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+.btn{
+    margin-top:20px;
+    background:#0081C6;
+    color:white;
+
+}
+

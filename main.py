@@ -8,11 +8,14 @@ import joblib
 from math import radians, cos, sin, asin, sqrt
 import pandas as pd
 import secrets
+import locale
+from datetime import timedelta
 from sqlalchemy import func
 
 
 app = Flask(__name__, static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@127.0.0.1:5432/CabMed'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=365)
 db = SQLAlchemy(app)
 secret_key = secrets.token_hex(16)
 app.secret_key =secret_key
@@ -141,6 +144,7 @@ def distance(lat1, lon1, lat2, lon2):
     a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
     c = 2 * asin(sqrt(a))
     r = 6371  # Radius of the Earth in kilometers
+    print("distance")
     return c * r
 
 def find_nearest_doctor(patient_lat, patient_lon, df):
@@ -150,6 +154,7 @@ def find_nearest_doctor(patient_lat, patient_lon, df):
 
     # Sort doctors by distance and return the nearest one
     nearest_doctor = df.sort_values(by=['distance']).iloc[0]
+    print(nearest_doctor)
 
     return nearest_doctor
 
@@ -202,6 +207,7 @@ def rdv_function(description_demandee, date_demandee, heure_demandee, patient_la
 
 
     predicted_speciality = pipeline.predict([description_demandee])[0]
+    print(predicted_speciality)
 
     # Charger la base de données des médecins (DabaDoc)
 
@@ -302,6 +308,10 @@ def redirect_to_patient():
 
 @app.route('/patient',methods=['POST','GET'])
 def index():
+    # Set the locale to French
+    locale.setlocale(locale.LC_TIME, 'fr_FR')
+
+
     if request.method == "POST":
         description = request.form['description_maladie']
         date_selectionne= request.form['date']
@@ -309,6 +319,12 @@ def index():
         latitude=float(request.form['lat'])
         longetude=float(request.form['long'])
         ville_selected=request.form['ville']
+        print(description)
+        print(date_selectionne)
+        print(heure_selectionne)
+        print(latitude)
+        print(longetude)
+        print(ville_selected)
         verification = description.split(" ")
         if len(verification)< 10:
             latitude = 33.589886
@@ -319,10 +335,16 @@ def index():
             map_html = localisation(lat, lon)
             now = datetime.datetime.now()
             month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month,now.year)
-            message = "le longeur de Texte est pas favorable merci de bien remplir le champs"
-            return render_template('index.html', month=month, year=year,
+            message = "le longeur de Texte n'est pas favorable merci de bien remplir le champs"
+            locale.setlocale(locale.LC_TIME, 'fr_FR')
+            month_name = calendar.month_name[month]
+            translated_month_name = month_name.capitalize()
+
+            print(translated_month_name)
+            return render_template('test.html', month=month, year=year,
                                    prev_month=prev_month, prev_year=prev_year,
                                    next_month=next_month, next_year=next_year,
+                                   month_name=translated_month_name,
                                    weeks=weeks, map_html=map_html,message=message)
 
         else:
@@ -344,7 +366,7 @@ def index():
                 if isinstance(result, str) and result == "heur":
                     latitude = 33.589886
                     longitude = -7.603869
-                    user_location = 'you'
+
                     lat, lon = latitude, longitude
                     # create a map with the location marker
 
@@ -352,9 +374,14 @@ def index():
                     now = datetime.datetime.now()
                     month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month,
                                                                                                          now.year)
-                    return render_template('index.html', map_html=map_html, month=month, year=year,
+                    locale.setlocale(locale.LC_TIME, 'fr_FR')
+                    month_name = calendar.month_name[month]
+                    translated_month_name = month_name.capitalize()
+
+                    print(translated_month_name)
+                    return render_template('test.html', map_html=map_html, month=month, year=year,
                                            prev_month=prev_month, prev_year=prev_year,
-                                           next_month=next_month, next_year=next_year,
+                                           next_month=next_month, next_year=next_year,month_name=translated_month_name,
                                            weeks=weeks, message="Il n y a pas des une heur disponible ")
                 elif isinstance(result, str) and result == "Specialite":
                     latitude = 33.589886
@@ -367,9 +394,15 @@ def index():
                     now = datetime.datetime.now()
                     month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month,
                                                                                                          now.year)
-                    return render_template('index.html', map_html=map_html, month=month, year=year,
+                    locale.setlocale(locale.LC_TIME, 'fr_FR')
+                    month_name = calendar.month_name[month]
+                    translated_month_name = month_name.capitalize()
+
+                    print(translated_month_name)
+                    return render_template('test.html', map_html=map_html, month=month, year=year,
                                            prev_month=prev_month, prev_year=prev_year,
                                            next_month=next_month, next_year=next_year,
+                                           month_name=translated_month_name,
                                            weeks=weeks, message="Pardon il n'y a pas une medecin pour voutre malade")
                 elif isinstance(result, str) and result == "Ville":
                     latitude = 33.589886
@@ -382,9 +415,15 @@ def index():
                     now = datetime.datetime.now()
                     month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month,
                                                                                                          now.year)
-                    return render_template('index.html', map_html=map_html, month=month, year=year,
+                    locale.setlocale(locale.LC_TIME, 'fr_FR')
+                    month_name = calendar.month_name[month]
+                    translated_month_name = month_name.capitalize()
+
+                    print(translated_month_name)
+                    return render_template('test.html', map_html=map_html, month=month, year=year,
                                            prev_month=prev_month, prev_year=prev_year,
                                            next_month=next_month, next_year=next_year,
+                                           month_name=translated_month_name,
                                            weeks=weeks, message="Pardon il n'y a pas une medecin dans "+ville_selected)
                 elif isinstance(result, str) and result == "date":
                     latitude = 33.589886
@@ -396,10 +435,17 @@ def index():
                     now = datetime.datetime.now()
                     month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month,
                                                                                                          now.year)
-                    return render_template('index.html', map_html=map_html, month=month, year=year,
+                    locale.setlocale(locale.LC_TIME, 'fr_FR')
+                    month_name = calendar.month_name[month]
+                    translated_month_name = month_name.capitalize()
+
+                    print(translated_month_name)
+                    return render_template('test.html', map_html=map_html, month=month, year=year,
                                            prev_month=prev_month, prev_year=prev_year,
                                            next_month=next_month, next_year=next_year,
-                                           weeks=weeks, message="Pardon il n'y a pas une rendez vous avec la date selectionne "+dd[:-1])
+                                           month_name=translated_month_name,
+                                           weeks=weeks,
+                                           message="Pardon il n'y a pas une rendez vous avec la date selectionne "+dd[:-1])
                 else:
 
                     result=rdv_function(description, dd[:-1], heure_selectionne, latitude, longetude,ville_selected)
@@ -416,8 +462,10 @@ def index():
                     ville = result['ville']
                     id_me = result['ID']
 
+
                     map_html=near_localisation(latitude, longetude, float(another_lat), float(another_lon), name)
                     predicted_speciality = pipeline.predict([description])[0]
+
                     patient = Patient.query.filter_by(email=session['email']).first()
 
                     # Update the values
@@ -445,7 +493,12 @@ def index():
                 now = datetime.datetime.now()
                 month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month,
                                                                                                      now.year)
-                return render_template('index.html', map_html=map_html, month=month, year=year,
+                locale.setlocale(locale.LC_TIME, 'fr_FR')
+                month_name = calendar.month_name[month]
+                translated_month_name = month_name.capitalize()
+
+
+                return render_template('test.html', map_html=map_html, month=month, year=year,month_name=translated_month_name,
                            prev_month=prev_month, prev_year=prev_year,
                            next_month=next_month, next_year=next_year,
                            weeks=weeks , message="Il n y a pas des rendez vous disponible merci")
@@ -466,10 +519,15 @@ def index():
             folium.Marker([lat, lon], popup=user_location).add_to(map)
             map_html = map._repr_html_()
             month,year,prev_month,prev_year,next_month,next_year,weeks=generate_calendar(month,year)
+            locale.setlocale(locale.LC_TIME, 'fr_FR')
+            month_name = calendar.month_name[month]
+            translated_month_name = month_name.capitalize()
 
-            return render_template('index.html', month=month, year=year,
+            print(translated_month_name)
+
+            return render_template('test.html', month=month, year=year,
                            prev_month=prev_month, prev_year=prev_year,
-                           next_month=next_month, next_year=next_year,
+                           next_month=next_month, next_year=next_year,month_name=translated_month_name,
                            weeks=weeks ,map_html=map_html)
         except Exception as e :
             print(e)
@@ -806,6 +864,8 @@ def Signin_patient():
     else:
 
         return render_template('sign_in.html')
+
+
 @app.route("/rendez_vous", methods =['GET', 'POST'])
 def rendez_vous():
     now = datetime.datetime.now()
@@ -818,10 +878,15 @@ def rendez_vous():
     folium.Marker([lat, lon], popup=user_location).add_to(map)
     map_html = map._repr_html_()
     month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month, now.year)
+    locale.setlocale(locale.LC_TIME, 'fr_FR')
+    month_name = calendar.month_name[month]
+    translated_month_name = month_name.capitalize()
+
     if request.method=='POST':
         try:
 
             id_med=session['id_med']
+
             email =session['email']
             date_rdv=session['Date_rdv']
             description_demandee= session['description_maladie']
@@ -836,11 +901,16 @@ def rendez_vous():
                 # Add the Rendez_vous to the database
                 db.session.add(rendez_vous)
                 db.session.commit()
+                locale.setlocale(locale.LC_TIME, 'fr_FR')
+                month_name = calendar.month_name[month]
+                translated_month_name = month_name.capitalize()
 
 
-                return render_template('index.html', month=month, year=year,
+
+
+                return render_template('test.html', month=month, year=year,
                                        prev_month=prev_month, prev_year=prev_year,
-                                       next_month=next_month, next_year=next_year,
+                                       next_month=next_month, next_year=next_year,month_name=translated_month_name,
                                        weeks=weeks, map_html=map_html,message_succes="Votre rendez-vous est bien enregistré")
 
             else:
@@ -850,10 +920,13 @@ def rendez_vous():
             return jsonify({"message":"Il y a un erreur" +e})
 
     else:
-        return render_template('index.html', month=month, year=year,
+        return render_template('test.html', month=month, year=year,
                                prev_month=prev_month, prev_year=prev_year,
-                               next_month=next_month, next_year=next_year,
+                               next_month=next_month, next_year=next_year,month_name=translated_month_name,
                                weeks=weeks, map_html=map_html, message="Il y a un probleme")
+@app.route('/test')
+def test():
+    return render_template('rendez_vous.html')
 
 
 

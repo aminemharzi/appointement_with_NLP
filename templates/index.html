@@ -125,7 +125,8 @@
 
              </div>
 
-              <select class="ville_select" name="ville" id="search_city_id"><option value="">Choisir une ville</option>
+              <select class="ville_select" name="ville" id="search_city_id">
+                  <option value="">Choisir une ville</option>
                         <option value="Agadir">Agadir</option>
                         <option value="Ait Melloul">Ait Melloul</option>
                         <option value="Arfoud">Arfoud</option>
@@ -205,13 +206,17 @@
 
         <div class="loca">
             <div class="calender_table">
-            <h1>Selectionner le jour</h1>
-            <h2 id="year_month">{{ month }}-{{ year }}</h2>
+            <div class="calender_header">
 
-            <a href="/patient?month={{ prev_month }}&year={{ prev_year }}">Précédente</a>
-            <a href="/patient?month={{ next_month }}&year={{ next_year }}">Suivante</a>
+                <a href="/patient?month={{ prev_month }}&year={{ prev_year }}"><img  src="{{ url_for('static', filename='Icons/back.png') }}" alt="Search"/></a>
+                 <h3 id="year_month">{{ month_name }} {{ year }}</h3>
+                <a href="/patient?month={{ next_month }}&year={{ next_year }}"><img  src="{{ url_for('static', filename='Icons/next.png') }}" alt="Search"/></a>
 
-            <table>
+            </div>
+
+
+
+            <table class="calender_body">
                 <tr>
                     <th>Lun</th>
                     <th>Mar</th>

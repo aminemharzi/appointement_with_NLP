@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>CabMed</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rendez_vous.css') }}">
+	<!-- Load bootstrap stylesheet -->
+
+
+
+</head>
+<body>
+    <div class="container_1">
+        <div class="background">
+
+        </div>
+        <div class="profile_details">
+             <img src="{{ url_for('static', filename='imgs/doc.jpg') }}" class="profile-image" alt="Doctor Profile Image">
+
+                <di></di><h2><b>{{ doctor_name }}</b></h2>
+                <di><p>{{ specialite }}</p></di>
+                <di><p>{{ adresse }}</p></di>
+                <di><p>etage 1 Residence khalij nakhil  immeuble 8 Founty  Sonaba (Entre De Ettijari Wafa Banque Et Le Lycee Francais D agadir )
+                        ( Au Dessus Du Cafe Muddy Cup ) Agadir 80000 Maroc</p></di>
+                 <di><p>{{ ville }}</p></di>
+                 <di> <p>{{ telephone }}</p></di>
+
+        </div>
+        <div class="main">
+            <div class="spescialty">
+                <p class="spescialty_header"><b>Spécialité</b></p>
+                <div class="specialite_elements">
+                    <div>
+                        <img src="{{ url_for('static', filename='Icons/correct.png') }}"
+                             class="spe_icon">
+                        &nbsp;
+                        <p>specialite</p>
+                    </div>
+                    <div>
+                        <img src="{{ url_for('static', filename='Icons/correct.png') }}"
+                               class="spe_icon">
+                        &nbsp;
+                        <p>specialite</p>
+                    </div>
+                    <div>
+                        <img src="{{ url_for('static', filename='Icons/correct.png') }}"
+                              class="spe_icon">
+                        &nbsp;
+                        <p>specialite</p>
+                    </div>
+                    <div>
+                        <img src="{{ url_for('static', filename='Icons/correct.png') }}"
+                                class="spe_icon">
+                        &nbsp;
+                        <p>specialite</p>
+                    </div>
+                    <div>
+                        <img src="{{ url_for('static', filename='Icons/correct.png') }}"
+                                class="spe_icon">
+                        &nbsp;
+                        <p>specialite</p>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="details_patient">
+                 <p class="spescialty_header"><b>Spécialité</b>: </p>
+                <div class="cards">
+
+                    <div class="spec spec1">
+                        <center>
+                            <p><b>Amine</b></p>
+
+                            <img  src="{{ url_for('static', filename='icons/ico.png') }}" alt="Doctor Profile Image">
+                            <br><br>
+                            <p><b>30%</b></p>
+
+                        </center>
+
+                    </div>
+                    <div class="spec spec1">
+                        <center>
+                            <p><b>Amine</b></p>
+
+                            <img  src="{{ url_for('static', filename='icons/ico.png') }}" alt="Doctor Profile Image">
+                            <br><br>
+                            <p><b>30%</b></p>
+                        </center>
+                    </div>
+                    <div class="spec spec1">
+                        <center>
+                            <p><b>Amine</b></p>
+
+                            <img  src="{{ url_for('static', filename='icons/ico.png') }}" alt="Doctor Profile Image">
+                            <br><br>
+                            <p><b>30%</b></p>
+
+                        </center>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="localisation_details">
+            <div class="rating">
+                <img src="{{ url_for('static', filename='Icons/star.png') }}"
+                             class="star_icon">
+                        &nbsp;
+                <p class="rating_text"><b>5 Rating</b></p>
+
+            </div>
+            <div class="map" id="map">
+
+            </div>
+            <form action="/rendez_vous" method="post">
+                <button type="submit" class="btn">Rendez-vous</button>
+            </form>
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+</body>
+</html>
