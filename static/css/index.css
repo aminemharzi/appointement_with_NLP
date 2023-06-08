@@ -2,7 +2,8 @@
 
 
   body{
-      margin:0;
+      margin:0px;
+      padding:0px;
       font-family:Inter;
 
   }
@@ -13,14 +14,14 @@
   }
     .main{
 
-       margin-top: -250px;
+       margin-top: -300px;
       display:grid;
-      grid-template-columns: 40% 60%;
+      grid-template-columns: 35% 65%;
       grid-template-rows: 10% 90%;
       grid-template-areas:
             "titre titre"
             "part1 part2";
-      width:100%;
+      width:80%;
       height:540px;
       background: white;
       border: 1px solid #E8ECF4;
@@ -74,9 +75,11 @@
 
 }
 .calender_table{
+
    margin-top:50px;
     border: 1px solid #E8ECF4;
-    padding:10px;
+    padding:20px;
+
 
 }
 
@@ -126,6 +129,7 @@ height: auto;
   height:70vh;
   background-attachment: fixed;
   background-size: cover;
+  margin-top:0px;
 }
 #localisation{
     font-size: 14px;
