@@ -16,12 +16,12 @@
 
        margin-top: -300px;
       display:grid;
-      grid-template-columns: 35% 65%;
+      grid-template-columns: 40% 60%;
       grid-template-rows: 10% 90%;
       grid-template-areas:
             "titre titre"
             "part1 part2";
-      width:80%;
+      width:90%;
       height:540px;
       background: white;
       border: 1px solid #E8ECF4;

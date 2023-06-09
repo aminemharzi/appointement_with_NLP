@@ -1,0 +1,89 @@
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+
+
+  body{
+      margin:0px;
+      padding:0px;
+      font-family:Inter;
+      background: #f8f8fa;
+
+  }
+
+ .container_all{
+
+
+      display:grid;
+      grid-template-columns: 20% 80%;
+      width:100%;
+      height:100vh;
+
+
+
+    }
+
+
+
+ .menu{
+    color:white;
+    background: #17171b;
+    height:100vh;
+    position:fixed;
+    width:190px;
+    display: flex;
+    flex-direction:column;
+
+
+
+ }
+ .logo{
+  padding:30px;
+
+
+ }
+.menu_elements{
+    list-style-type: none;
+    padding:20px;
+
+
+}
+
+.menu_elements a{
+   margin:12px;
+   text-decoration: none;
+   color:white;
+   display:flex;
+   justify-content: space-between;
+
+
+}
+
+ .container2{
+    display:flex;
+    flex-direction:column;
+    justify-content: space-between;
+    height:80%;
+
+
+ }
+ .log_out{
+ list-style-type: none;
+ padding:30px;
+
+ }
+
+ .log_out a{
+ text-decoration: none;
+  color:white;
+
+ }
+
+.menu a:hover{
+color:#9cb06d;
+
+
+}
+.active{
+    color:#9cb06d;
+
+
+}

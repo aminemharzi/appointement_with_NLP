@@ -5,7 +5,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>Login Page Ep. 3</title>
+	<title>CabMed</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 	<!-- Load bootstrap stylesheet -->
 
@@ -130,8 +130,8 @@
 
 
                 </div>
-                <div class="form-group">
-                    <label for="select_time" >Heure</label>
+                <!--<div class="form-group">
+                    <label for="select_time" >Ville</label>
                     <select  id="search_city_id" name="ville" class="form-control">
 
                             <option value="">Choisir une ville</option>
@@ -191,14 +191,14 @@
                             <option value="Tétouan">Tétouan</option>
 
                     </select>
-                </div>
+                </div>-->
                  <div class="form-group">
                     <label for="description_maladie">Description de maladie</label>
                     <textarea id="description_maladie" name="description_maladie" class="form-control" placeholder="Veuillez décrire vos symptômes..." rows="7"></textarea>
 
                 </div>
                     <br><br>
-                <button type="submit" class="btn btn-primary" tabindex="3">
+                <button type="submit" class="btn btn-dark" tabindex="3">
                     Enregistré
                 </button>
 

@@ -153,8 +153,8 @@ def find_nearest_doctor(patient_lat, patient_lon, df):
     df['distance'] = df.apply(lambda row: distance(patient_lat, patient_lon, row['Latitude'], row['Longitude']), axis=1)
 
     # Sort doctors by distance and return the nearest one
-    nearest_doctor = df.sort_values(by=['distance']).iloc[0]
-    print(nearest_doctor)
+    nearest_doctor = df.sort_values(by=['distance'])
+
 
     return nearest_doctor
 
@@ -230,9 +230,13 @@ def rdv_function(description_demandee, date_demandee, heure_demandee, patient_la
     # les medcines dans votre spécialité
     specialite_selectionne = listes_rdv[listes_rdv['Nom_doc'].isin(list_names)]
     print("specialite_selectionne",specialite_selectionne)
+    '''ville_selectionne = listes_rdv[
+        (listes_rdv['Ville'] == ville_selectionee) & (listes_rdv['Nom_doc'].isin(specialite_selectionne['Nom_doc']))]'''
     ville_selectionne = listes_rdv[
-        (listes_rdv['Ville'] == ville_selectionee) & (listes_rdv['Nom_doc'].isin(specialite_selectionne['Nom_doc']))]
+         listes_rdv['Nom_doc'].isin(specialite_selectionne['Nom_doc'])]
     print("ville_selectionne", ville_selectionne)
+    print(ville_selectionne[['Date','Heure']])
+    print("date demander "+date_demandee +" heure "+heure_demandee)
     date_cond = listes_rdv[
         (listes_rdv['Date'] == date_demandee) & (listes_rdv['Nom_doc'].isin(ville_selectionne['Nom_doc']))]
     print("date_cond", date_cond)
@@ -315,16 +319,13 @@ def index():
     if request.method == "POST":
         description = request.form['description_maladie']
         date_selectionne= request.form['date']
+
         heure_selectionne = request.form['heure']
         latitude=float(request.form['lat'])
         longetude=float(request.form['long'])
-        ville_selected=request.form['ville']
-        print(description)
-        print(date_selectionne)
-        print(heure_selectionne)
-        print(latitude)
-        print(longetude)
-        print(ville_selected)
+        #ville_selected=request.form['ville']
+        ville_selected = ""
+
         verification = description.split(" ")
         if len(verification)< 10:
             latitude = 33.589886
@@ -340,7 +341,7 @@ def index():
             month_name = calendar.month_name[month]
             translated_month_name = month_name.capitalize()
 
-            print(translated_month_name)
+
             return render_template('test.html', month=month, year=year,
                                    prev_month=prev_month, prev_year=prev_year,
                                    next_month=next_month, next_year=next_year,
@@ -361,7 +362,11 @@ def index():
             for i in date.split("-"):
                 dd=i+'-'+dd
             try:
-                result = rdv_function(description, dd[:-1], heure_selectionne, latitude, longetude,ville_selected)
+                print("dd ",dd[:-1])
+
+                result = rdv_function(description, dd[:-1], heure_selectionne, latitude, longetude,ville_selected).iloc[0]
+
+
 
                 if isinstance(result, str) and result == "heur":
                     latitude = 33.589886
@@ -378,7 +383,7 @@ def index():
                     month_name = calendar.month_name[month]
                     translated_month_name = month_name.capitalize()
 
-                    print(translated_month_name)
+                    
                     return render_template('test.html', map_html=map_html, month=month, year=year,
                                            prev_month=prev_month, prev_year=prev_year,
                                            next_month=next_month, next_year=next_year,month_name=translated_month_name,
@@ -398,7 +403,7 @@ def index():
                     month_name = calendar.month_name[month]
                     translated_month_name = month_name.capitalize()
 
-                    print(translated_month_name)
+                    
                     return render_template('test.html', map_html=map_html, month=month, year=year,
                                            prev_month=prev_month, prev_year=prev_year,
                                            next_month=next_month, next_year=next_year,
@@ -419,7 +424,7 @@ def index():
                     month_name = calendar.month_name[month]
                     translated_month_name = month_name.capitalize()
 
-                    print(translated_month_name)
+                    
                     return render_template('test.html', map_html=map_html, month=month, year=year,
                                            prev_month=prev_month, prev_year=prev_year,
                                            next_month=next_month, next_year=next_year,
@@ -439,7 +444,7 @@ def index():
                     month_name = calendar.month_name[month]
                     translated_month_name = month_name.capitalize()
 
-                    print(translated_month_name)
+                    
                     return render_template('test.html', map_html=map_html, month=month, year=year,
                                            prev_month=prev_month, prev_year=prev_year,
                                            next_month=next_month, next_year=next_year,
@@ -448,7 +453,8 @@ def index():
                                            message="Pardon il n'y a pas une rendez vous avec la date selectionne "+dd[:-1])
                 else:
 
-                    result=rdv_function(description, dd[:-1], heure_selectionne, latitude, longetude,ville_selected)
+                    all_recmanded=rdv_function(description, dd[:-1], heure_selectionne, latitude, longetude,ville_selected)
+                    result = all_recmanded.iloc[0]
                     name = result['Name']
 
                     another_lat = result['Latitude']
@@ -458,9 +464,10 @@ def index():
                     adresse=result['Adresse']
 
                     tele= result['Tele']
-                    
+
                     ville = result['ville']
                     id_me = result['ID']
+
 
 
                     map_html=near_localisation(latitude, longetude, float(another_lat), float(another_lon), name)
@@ -477,11 +484,27 @@ def index():
                     db.session.commit()
 
                     session['id_med']=id_me
+                    session['lang'] = longetude
+                    session['lat'] = latitude
                     session['description_maladie']=description
                     session['Date_rdv']=date_selectionne+" "+heure_selectionne
+                    session['doc_recomandé']=all_recmanded.to_json()
+                    session['specialite']=predicted_speciality
+                    doctor = Doctor.query.filter_by(id_med=id_me).first()
+                    rating= doctor.rating
+                    specialite_med= Avoir.query.filter_by(id_med=id_me).all()
+                    specialite_list=[]
+                    for spe in specialite_med:
+                        specialite_list.append(spe.specialte_rel.specialite)
 
-                    return render_template('reservation.html',
-                                           map_html=map_html ,specialite=predicted_speciality,doctor_name=name, ville=ville,adresse= adresse,telephone=tele )
+                    all_recmanded['distance'] = all_recmanded['distance'].astype(int)
+                    print("this ",all_recmanded[1:4].columns)
+
+                    '''return render_template('rendez_vous.html',
+                                           map_html=map_html ,specialite=predicted_speciality,doctor_name=name,
+                                           ville=ville,adresse= adresse,telephone=tele, rating=rating,
+                                           specialite_med=specialite_list,recamanded_meds= all_recmanded[1:4])'''
+                    return redirect('/rendez_vous/'+id_me)
             except Exception as e :
                 print(e)
                 latitude = 33.589886
@@ -523,7 +546,7 @@ def index():
             month_name = calendar.month_name[month]
             translated_month_name = month_name.capitalize()
 
-            print(translated_month_name)
+            
 
             return render_template('test.html', month=month, year=year,
                            prev_month=prev_month, prev_year=prev_year,
@@ -532,6 +555,45 @@ def index():
         except Exception as e :
             print(e)
             return "Il y a un erreur"
+
+
+
+@app.route('/rendez_vous/<int:id_medcin>', methods=['GET', 'POST'])
+def rendez_vous_page(id_medcin):
+
+
+    longetude=session['lang']
+    latitude=session['lat']
+    #description=session['description_maladie']
+    predicted_speciality=session['specialite']
+
+    all_recmanded=pd.read_json(session['doc_recomandé'])
+    all_recmanded=all_recmanded[all_recmanded['ID']!=id_medcin]
+    doctor = Doctor.query.filter_by(id_med=id_medcin).first()
+    rating = doctor.rating
+    another_lat=doctor.latitude
+    another_lon=doctor.longitude
+    name=doctor.name
+    adresse=doctor.adresse
+    tele=doctor.telephone
+    ville=doctor.ville_rel.ville
+    map_html = near_localisation(latitude, longetude, float(another_lat), float(another_lon), name)
+    specialite_med = Avoir.query.filter_by(id_med=id_medcin).all()
+    specialite_list = []
+    for spe in specialite_med:
+        specialite_list.append(spe.specialte_rel.specialite)
+
+    all_recmanded['distance'] = all_recmanded['distance'].astype(int)
+    print("this ", all_recmanded[1:4].columns)
+
+    return render_template('rendez_vous.html',
+                           map_html=map_html, specialite=predicted_speciality, doctor_name=name,
+                           ville=ville, adresse=adresse, telephone=tele, rating=rating,
+                           specialite_med=specialite_list, recamanded_meds=all_recmanded[1:4])
+
+
+
+
 
 @app.route('/medcin', methods=['GET'])
 def medcin():
@@ -595,10 +657,6 @@ def medcin():
                            rendezvous_data=rendezvous_data,
                            speciality_percent=speciality_percent,full_name=full_name, id_patient=rendezvous_data[0].id_patient,
                            map_html=map_html)
-
-
-
-
 
 
 @app.route('/medcin/<int:id_patient>', methods=['GET'])
@@ -926,7 +984,7 @@ def rendez_vous():
                                weeks=weeks, map_html=map_html, message="Il y a un probleme")
 @app.route('/test')
 def test():
-    return render_template('rendez_vous.html')
+    return render_template('admin.html')
 
 
 

@@ -18,13 +18,11 @@
 
         </div>
         <div class="profile_details">
-             <img src="{{ url_for('static', filename='imgs/doc.jpg') }}" class="profile-image" alt="Doctor Profile Image">
+             <img src="{{ url_for('static', filename='imgs/dot1.jpg') }}" class="profile-image" alt="Doctor Profile Image">
 
-                <di></di><h2><b>{{ doctor_name }}</b></h2>
-                <di><p>{{ specialite }}</p></di>
+                <di><h2><b>{{ doctor_name }}</b></h2></di>
+                <di><p><b>Specialité detecté: </b>{{ specialite }}</p></di>
                 <di><p>{{ adresse }}</p></di>
-                <di><p>etage 1 Residence khalij nakhil  immeuble 8 Founty  Sonaba (Entre De Ettijari Wafa Banque Et Le Lycee Francais D agadir )
-                        ( Au Dessus Du Cafe Muddy Cup ) Agadir 80000 Maroc</p></di>
                  <di><p>{{ ville }}</p></di>
                  <di> <p>{{ telephone }}</p></di>
                 <form action="/rendez_vous" method="post">
@@ -36,78 +34,33 @@
             <div class="spescialty">
                 <p class="spescialty_header"><b>Spécialité</b></p>
                 <div class="specialite_elements">
+                    {% for element in specialite_med %}
                     <div>
                         <img src="{{ url_for('static', filename='Icons/correct.png') }}"
                              class="spe_icon">
                         &nbsp;
-                        <p>specialite</p>
+                        <p>{{ element }}</p>
                     </div>
-                    <div>
-                        <img src="{{ url_for('static', filename='Icons/correct.png') }}"
-                               class="spe_icon">
-                        &nbsp;
-                        <p>specialite</p>
-                    </div>
-                    <div>
-                        <img src="{{ url_for('static', filename='Icons/correct.png') }}"
-                              class="spe_icon">
-                        &nbsp;
-                        <p>specialite</p>
-                    </div>
-                    <div>
-                        <img src="{{ url_for('static', filename='Icons/correct.png') }}"
-                                class="spe_icon">
-                        &nbsp;
-                        <p>specialite</p>
-                    </div>
-                    <div>
-                        <img src="{{ url_for('static', filename='Icons/correct.png') }}"
-                                class="spe_icon">
-                        &nbsp;
-                        <p>specialite</p>
-                    </div>
+                    {% endfor %}
 
                 </div>
 
 
             </div>
             <div class="details_patient">
-                 <p class="spescialty_header"><b>Spécialité</b>: </p>
+                 <p class="spescialty_header header_two"><b>autres médecin recommandé</b>: </p>
                 <div class="cards">
 
-                    <div class="spec spec1">
-                        <center>
-                            <p><b>Amine</b></p>
+                    {% for index, row in recamanded_meds.iterrows() %}
 
-                            <img  src="{{ url_for('static', filename='icons/ico.png') }}" alt="Doctor Profile Image">
-                            <br><br>
-                            <p><b>30%</b></p>
-
-                        </center>
-
-                    </div>
-                    <div class="spec spec1">
-                        <center>
-                            <p><b>Amine</b></p>
-
-                            <img  src="{{ url_for('static', filename='icons/ico.png') }}" alt="Doctor Profile Image">
-                            <br><br>
-                            <p><b>30%</b></p>
-                        </center>
-                    </div>
-                    <div class="spec spec1">
-                        <center>
-                            <p><b>Amine</b></p>
-
-                            <img  src="{{ url_for('static', filename='icons/ico.png') }}" alt="Doctor Profile Image">
-                            <br><br>
-                            <p><b>30%</b></p>
-
-                        </center>
-
-                    </div>
-
-
+                    <a href="/rendez_vous/{{ row['ID'] }}">
+                        <div class="med_recomande">
+                        <h4><b>{{ row['Name'] }}</b></h4>
+                        <p>{{ row['ville'] }}</p>
+                        <p>{{ row['distance'] }} Km</p>
+                        </div>
+                    </a>
+                    {% endfor %}
                 </div>
 
             </div>
@@ -118,22 +71,14 @@
                 <img src="{{ url_for('static', filename='Icons/star.png') }}"
                              class="star_icon">
                         &nbsp;
-                <p class="rating_text"><b>5 Rating</b></p>
+                <p class="rating_text"><b>{{ rating }} Rating</b></p>
 
             </div>
-            <div class="map" id="map">
-
-            </div>
-
+            {{ map_html | safe }}
 
         </div>
 
-
-
     </div>
-
-
-
 
 <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 

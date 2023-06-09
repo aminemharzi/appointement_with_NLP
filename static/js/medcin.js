@@ -1,9 +1,11 @@
+const currentDate = new Date();
+const year = currentDate.getFullYear();
+
 var searchInput = document.getElementById('searchInput');
 var list = document.getElementById('myList').getElementsByTagName('li');
 var selectedItem = document.getElementById('selectedItem');
 
-const currentDate = new Date();
-const year = currentDate.getFullYear();
+
 searchInput.addEventListener('input', function() {
   var searchValue = searchInput.value.toLowerCase();
 
@@ -84,161 +86,22 @@ function handleDayClick(element, patients) {
         });
 }
 
-// Function to create the bar graph
-/*function createBarGraph(data) {
-        var ctx = document.getElementById('appointmentChart').getContext('2d');
-        var labels = data.map(function(item) {
-
-            return item[0]['day'];
-        });
-        var values = data.map(function(item) {
-            console.log(item[0])
-            return item[0]['appointments'];
-        });
-
-        var chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Appointments per Month',
-                    data: values,
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        precision: 0
-                    }
-                }
-            }
-        });
-    }
-
-    // Retrieve the appointment data and create the bar graph
-  $.ajax({
-        url: '/appointments_data',
-        type: 'GET',
-        success: function(data) {
-            createBarGraph(data);
-        }
-  });*/
-
-    // Retrieve the appointment data and create the bar graph
 
 
-/*
-function createBarGraph(weekData, month, year) {
-  var ctx = document.getElementById('appointmentChart').getContext('2d');
 
-  var labels = weekData.map(function (item) {
-   return item[0];
-  });
-  var values = weekData.map(function (item) {
-    console.log(item['appointments'])
-    return item[1];
-  });
-  var nextButton= document.getElementById('nextButton');
-  var previousButton= document.getElementById('previousButton');
-   const currentDate = new Date();
 
-    // Get the next month
-    const nextMonth = new Date(currentDate.getFullYear(), month + 1);
-    const nextMonthNumber = nextMonth.getMonth() +1; // Months are zero-based, so we add 1
 
-    // Get the previous month
-    console.log(month);
-    alert(month);
-    const previousMonth = new Date(currentDate.getFullYear(), month - 1);
-    const previousMonthNumber = previousMonth.getMonth() ; // Months are zero-based, so we add 1
 
- // Output: Next month number (e.g., 6 for June)
-    nextButton.textContent=nextMonthNumber;
 
-    previousButton.textContent=previousMonthNumber;
 
-  var chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Appointments per Week',
-        data: values,
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          precision: 0
-        }
-      }
-    }
-  });
-}
 
-$(document).ready(function () {
-  var weeksData = []; // Array to store all the week data
-  var currentWeekIndex = 0; // Index of the current week being displayed
 
-  // Function to update the bar graph with the current week data
-  function updateBarGraph(month) {
-    const year = currentDate.getFullYear();
-   $.ajax({
-    url: '/appointments_data?month='+month+'&year='+year,
-    type: 'GET',
-    success: function (response) {
 
-     createBarGraph(response,month,year );
-      console.log(weeksData)
-    },
-    error: function (error) {
-      console.log(error);
-    }
-  });
-    var currentWeekData = weeksData[currentWeekIndex];
-    createBarGraph(currentWeekData);
-  }
 
-  // Function to handle the previous week button click
-  $('#previousButton').on('click', function () {
-    var previousButton= document.getElementById('previousButton');
-    updateBarGraph(previousButton.textContent);
-  });
 
-  // Function to handle the next week button click
-  $('#nextButton').on('click', function () {
-    var nextButton= document.getElementById('nextButton');
-    updateBarGraph(nextButton.textContent);
-  });
 
-  // Fetch the data for 'weeks' variable using AJAX
-const currentDate = new Date();
-const year = currentDate.getFullYear();
-const month = currentDate.getMonth() + 1; // Months are zero-based, so we add 1
-const day = currentDate.getDate();
-const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
-  $.ajax({
-    url: '/appointments_data?month='+month+'&year='+year,
-    type: 'GET',
-    success: function (response) {
 
-     createBarGraph(response,month, year );
-      console.log(weeksData)
-    },
-    error: function (error) {
-      console.log(error);
-    }
-  });
-});*/
 
 var nextButton= document.getElementById('nextButton');
 var previousButton= document.getElementById('previousButton');

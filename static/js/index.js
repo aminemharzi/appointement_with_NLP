@@ -62,15 +62,15 @@
 
             var date_complet=selectedDay+"-"+year_month.getAttribute('date');
 
+
             var input_date = document.getElementById('date');
-            var ville_input = document.getElementById('ville');
-            var selected_ville= document.getElementById('search_city_id').value;
+
 
             input_date.value = date_complet;
             var button_heure = document.getElementById('select_time').value;
 
 
-            ville_input.value=selected_ville;
+
 
 
         }
