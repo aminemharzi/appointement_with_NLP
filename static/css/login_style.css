@@ -226,7 +226,29 @@ body {
 	background-repeat: no-repeat;
 	background-position: center;
 }
+.patient_part{
+    background: #cee7f4;
+    width:200px;
+    height:60px;
+    border:none;
+    border-radius: 10px;
 
+}
+
+.medcin_part{
+    background: #cee7f4;
+    width:200px;
+    height:60px;
+    border:none;
+    border-radius: 10px;
+
+}
+.medcin_part:focus {
+  outline-color: #007bff;
+}
+.patient_part:focus {
+  outline-color: #007bff;
+}
 @media screen and (min-width: 769px) and (max-width: 1023px) {
 	.card-login {
 		width: 800px;

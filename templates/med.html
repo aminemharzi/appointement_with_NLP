@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>CabMed</title>
       <link rel="stylesheet" href="{{ url_for('static', filename='css/med.css') }}">
+
 </head>
 <body>
 
@@ -12,17 +13,93 @@
       <div class="logo">
         <h4><b>CabMed</b></h4>
 
+
       </div>
       <div class="container2">
           <ul class="menu_elements">
-            <a href="" ><li class="active"><img  class="active" src="{{ url_for('static', filename='Icons/dashboard.png') }}" alt="Search"/>Overview</li></a>
-             <a href=""><li><img  src="{{ url_for('static', filename='Icons/patient.png') }}" alt="Search"/>Patient</li></a>
-             <a href=""><li><img  src="{{ url_for('static', filename='Icons/appointment.png') }}" alt="Search"/>Rendez-vous</li></a>
-             <a href=""><li><img  src="{{ url_for('static', filename='Icons/user.png') }}" alt="Search"/>Profile</li></a>
+
+              <!--Pateints page-->
+              {% if active == 'Dashboard' %}
+                <a href="/med/dashboard">
+                    <li class="active">
+                        <img  class="active" src="{{ url_for('static', filename='Icons/dashboard active.png') }}" alt="Search"/>
+                        &nbsp;&nbsp;Dashboard
+                    </li>
+                </a>
+              {% else %}
+                <a href="/med/dashboard" onmouseover='changeIcon(this.querySelector("img"), "{{ url_for("static", filename="Icons/dashboard active.png") }}")' onmouseout="changeIcon(this.querySelector('img'), '{{ url_for('static', filename='Icons/dashboard.png') }}')">
+                    <li >
+                        <img  class="active" src="{{ url_for('static', filename='Icons/dashboard.png') }}" alt="Search"/>
+                        &nbsp;&nbsp;Dashboard
+                    </li>
+                </a>
+
+              {% endif %}
+
+
+            <!-------- Patients page------------------------------------->
+              {% if active == 'Patients' %}
+                 <a href="/med/patients">
+                     <li class="active">
+                         <img  src="{{ url_for('static', filename='Icons/patient active.png') }}"/>
+                         &nbsp;&nbsp;Patients
+                     </li>
+                 </a>
+              {% else %}
+                     <a href="/med/patients" onmouseover='changeIcon(this.querySelector("img"), "{{ url_for("static", filename="Icons/patient active.png") }}")' onmouseout="changeIcon(this.querySelector('img'), '{{ url_for('static', filename='Icons/patient.png') }}')">
+                         <li>
+                             <img  src="{{ url_for('static', filename='Icons/patient.png') }}"/>
+                             &nbsp;&nbsp;Patients
+                         </li>
+                     </a>
+
+              {% endif %}
+
+               <!--------Rendez-vous page------------------------->
+
+              {% if active == 'Rendez-vous' %}
+                 <a href="/med/rendez-vous" >
+                     <li class="active">
+                         <img  src="{{ url_for('static', filename='Icons/appointment active.png') }}" alt="Search"/>&nbsp;&nbsp;Rendez-vous
+                     </li>
+                 </a>
+              {% else %}
+                     <a href="/med/rendez-vous"  onmouseover='changeIcon(this.querySelector("img"), "{{ url_for("static", filename="Icons/appointment active.png") }}")' onmouseout="changeIcon(this.querySelector('img'), '{{ url_for('static', filename='Icons/appointment.png') }}')">
+                         <li >
+                             <img  src="{{ url_for('static', filename='Icons/appointment.png') }}" alt="Search"/>&nbsp;&nbsp;Rendez-vous
+                         </li>
+                     </a>
+
+              {% endif %}
+
+
+               <!-----------------Profile page---------------------------->
+
+              {% if active == 'Profile' %}
+                 <a href="/med/profile" >
+                     <li class="active">
+                         <img  src="{{ url_for('static', filename='Icons/user active.png') }}" alt="Search"/>&nbsp;&nbsp;Profile
+                     </li>
+                 </a>
+              {% else %}
+                     <a href="/med/profile" onmouseover='changeIcon(this.querySelector("img"), "{{ url_for("static", filename="Icons/user active.png") }}")' onmouseout="changeIcon(this.querySelector('img'), '{{ url_for('static', filename='Icons/user.png') }}')">
+                     <li >
+                         <img  src="{{ url_for('static', filename='Icons/user.png') }}" alt="Search"/>&nbsp;&nbsp;Profile
+                     </li>
+                 </a>
+              {% endif %}
+
+
+
 
         </ul>
         <div class="log_out">
-          <a href=""><li><img  src="{{ url_for('static', filename='Icons/logout.png') }}" alt="Search"/>Log out</li></a>
+          <a href="/med/logout" onmouseover='changeIcon(this.querySelector("img"), "{{ url_for("static", filename="Icons/logout active.png") }}")' onmouseout="changeIcon(this.querySelector('img'), '{{ url_for('static', filename='Icons/logout.png') }}')">
+              <li>
+                  <img  src="{{ url_for('static', filename='Icons/logout.png') }}" alt="Search"/>
+                  &nbsp;&nbsp;Log out
+              </li>
+          </a>
         </div>
       </div>
 
@@ -30,11 +107,20 @@
     </div>
 
     <div class="main">
+        {% block main%}{% endblock %}
 
     </div>
 
 
   </div>
+
+    <!-- Include the necessary JavaScript libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+     {% block js%}{% endblock %}
 
 </body>
 </html>

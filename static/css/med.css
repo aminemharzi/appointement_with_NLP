@@ -12,8 +12,7 @@
  .container_all{
 
 
-      display:grid;
-      grid-template-columns: 20% 80%;
+
       width:100%;
       height:100vh;
 
@@ -49,10 +48,12 @@
 
 .menu_elements a{
    margin:12px;
+   margin-bottom:25px;
    text-decoration: none;
    color:white;
    display:flex;
    justify-content: space-between;
+
 
 
 }
@@ -87,3 +88,537 @@ color:#9cb06d;
 
 
 }
+
+
+.main2{
+
+    margin-left:190px;
+      padding: 10px;
+      padding-left: 20px;
+    background:#f8f8fa;
+    height:120vh;
+    display:grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 7% 20% 40% 33%;
+     grid-template-areas:
+     'grand_titre grand_titre'
+     'general_stat general_stat'
+     'graph map'
+     'patients_table patients_table'
+     ;
+
+}
+
+.patients_table{
+    grid-area: patients_tables;
+
+
+}
+.general_stat{
+    grid-area: general_stat;
+    display:flex;
+    padding-top:20px;
+    justify-content:space-around;
+
+
+}
+.general_stat>div{
+   background:white;
+   width: 200px;
+   height: 70%;
+   padding:10px;
+   display:flex;
+   justify-content:space-around;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+
+
+}
+.grand_titre{
+    grid-area: grand_titre;
+
+
+}.map{
+    grid-area: map;
+     background:white;
+      margin:10px 20px 10px 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+
+}.graph{
+    margin:10px 10px 10px 20px;
+    grid-area: graph;
+    background:white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+
+}
+.stat_image{
+    height:50px;
+    width:50px;
+
+
+}
+ #nextButton{
+    background-color:rgba(75, 192, 192, 0.6);
+    color: #fff;
+    border:none;
+    padding:10px;
+    min-height:20px;
+    font-weight: bold;
+    min-width: 100px;
+    font-size: 14px;
+
+    }
+    #previousButton{
+     background-color:#0a0a23;
+    color: #fff;
+    border:none;
+    padding:10px;
+    min-height:20px;
+    min-width: 100px;
+    font-size: 14px;
+
+    }
+
+ .main3{
+
+    margin-left:190px;
+     padding: 10px;
+     padding-left: 20px;
+    background:#f8f8fa;
+    height:115vh;
+    display:grid;
+    grid-template-columns: 60% 40%;
+    grid-template-rows: 10% 90%;
+     grid-template-areas:
+     'grand_titre grand_titre'
+     'patients_list details_patients'
+     ;
+
+}
+.patients_list{
+
+    margin:10px 10px 10px 10px;
+    grid-area:patients_list;
+
+
+}
+.details_patients{
+
+    margin:10px 10px 10px 10px;
+
+    grid-area:details_patients;
+
+
+
+}
+
+  .search_section{
+     padding:0 5px 0 5px;
+     background:#ffffff;
+
+     width:98%;
+    height:40px;
+    margin-bottom:10px;
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+
+ }
+.icon{
+    border:none;
+    background:white;
+    height:100%;
+
+ }
+
+ #searchInput{
+    color:black;
+    outline: none;
+    border:none;
+    width: 93%;
+ }
+ .line{
+    color:black;
+     text-decoration: none;
+     background:white;
+
+ }
+ .scrollable-content .clicked {
+      /* Styles for the first list item */
+      font-weight: bold;
+    background: #17171b;
+      color:white;
+      display:flex;
+     justify-content:space-around;
+    }
+
+    .clicked {
+      /* Styles for the first list item */
+      font-weight: bold;
+    background: #17171b;
+      color:white;
+      display:flex;
+     justify-content:space-around;
+    }
+    .scrollable-content .not_clicked {
+      /* Styles for the first list item */
+
+      text-decoration: none;
+      margin-top:10px;
+       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+       background: white;
+      color:black;
+      display:flex;
+     justify-content:space-around;
+    }
+
+.scrollable-container {
+          overflow: auto;
+          /* Enable scrolling */
+          height:100%;
+        }
+
+        .scrollable-content {
+          /* Set the content size if needed */
+          /* For example: width: 1000px; height: 500px; */
+        }
+        .scrollable-container::-webkit-scrollbar {
+          width: 8px; /* Set the width of the scrollbar */
+        }
+
+        .scrollable-container::-webkit-scrollbar-track {
+          background-color: #f1f1f1; /* Set the color of the scrollbar track */
+        }
+
+        /* Styling the scrollbar thumb */
+        .scrollable-container::-webkit-scrollbar-thumb {
+          background-color: #888; /* Set the color of the scrollbar thumb */
+        }
+
+        .scrollable-container::-webkit-scrollbar-thumb:hover {
+          background-color: #555; /* Set the color of the scrollbar thumb on hover */
+        }
+        .scrollable-content>li {
+          /* Define your styles here */
+          list-style-type: none;
+
+        }
+  .infos{
+    display:grid;
+    grid-template-columns: 50% 50%;
+
+
+
+  }
+  .infos_general{
+   padding:20px;
+  background:white;
+  height:auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+
+
+  }
+  .description{
+  font-size: 14px;
+  }
+
+
+.specialities{
+
+    margin-top:10px;
+    display:grid;
+    column-gap: 5px;
+    row-gap: 5px;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+
+
+
+}
+.specialities div{
+        place-self: center;
+        padding-top:5px;
+        background: black;
+        text-align: center;
+        border: 2px solid white;
+        border-radius: 10px;
+        transition: all .3s ease;
+        color:white;
+        width: 90%;
+        height:90%;
+}
+.normal_text{
+    font-size:15px;
+    color:#a8a7ac;
+
+
+
+}
+.spe:nth-child(1){
+            background: #9E366B;
+
+  }
+ .spe:nth-child(2){
+   background: #5554DB;
+
+ }
+ .spe:nth-child(3){
+     background: #FFA873;
+
+  }
+  .spe:nth-child(4){
+      background: #A079EC;
+
+}
+.calender_table{
+    padding:40px 30px 10px 30px;
+     margin-left:190px;
+     height:100vh;
+     background:#f8f8fa;
+
+}
+
+.calender_header{
+    display:flex;
+    justify-content:space-between;
+    height: 40px;
+     padding:10px;
+    background:white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+.calender_header h3{
+    margin-top:0px;
+
+
+}
+
+.calender_header a{
+height: auto;
+}
+table{
+    margin-top:20px;
+    width:100%;
+    border:1px solid black;
+    background:white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse;
+
+}
+td{
+    height:100px;
+    border:1px solid black;
+    text-align: center;
+    font-size:16px;
+    font-weight:bold;
+
+
+
+}
+th{
+    height:20px;
+    border:1px solid black;
+
+
+
+}
+
+.calender_day{
+        width: 100%;
+        height:100%;
+        font-family:Inter;
+        font-size: 16px;
+        background: white;
+        border: none;
+        color: black;
+        outline:non;
+
+        /* Border */
+        cursor: pointer;
+    }
+.has_rendezvous{
+    background:#007bff;
+    color:white;
+    outline:non;
+     border: none;
+
+ }
+.main4{
+    height:100vh;
+     display:grid;
+    grid-template-columns: 15% 70% 15%;
+    margin-left:190px;
+
+
+}
+
+
+.profil_data{
+    margin:20px;
+     background:white;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+     padding:30px;
+
+
+}
+.specialty_names{
+    color:#2196f3;
+
+
+
+}
+
+.in{
+    display:grid;
+    grid-template-columns: 50% 50%;
+
+}
+.map_med{
+    height:300px;
+}
+.adresse{
+    font-size:14px;
+
+}
+#speciality_names{
+display:flex;
+justify-content:space-between;
+font-size:14px;
+}
+.doc_name{
+    display:flex;
+    justify-content:space-between;
+}
+.rat{
+    display:flex;
+    height: 30px;
+    text-align:center;
+
+
+
+}
+.star{
+    height: 25px;
+    width:25px;
+
+}
+
+
+
+
+
+
+
+
+.contain{
+ margin-left:190px;
+ padding:10px;
+
+      display:grid;
+      grid-template-columns:37% 33% 27%;
+      column-gap: 10px;
+
+
+
+}
+
+
+
+
+
+
+ .container {
+      max-width: 800px;
+
+      padding: 20px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+
+    .profile-info {
+      flex-grow: 1;
+    }
+
+    .contain h1 {
+      color: #333333;
+      margin: 0;
+    }
+
+    .contain p {
+      color: #666666;
+      margin: 0;
+      margin-bottom: 10px;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      color: #333333;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .section-content {
+      background-color: #f6f6f6;
+      padding: 20px;
+      border-radius: 5px;
+    }
+
+    .section-content p {
+      margin: 0;
+      padding: 5px 0;
+    }
+
+
+
+    .contact-info i {
+      margin-right: 10px;
+      color: #666666;
+    }
+
+    .specialties {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .specialties span {
+      background-color: #eeeeee;
+      color: #666666;
+      padding: 5px 10px;
+      border-radius: 5px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+  .map_section{
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding:20px;
+
+
+
+  }
+  .spex{
+  background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding:20px;
+
+
+  }
+
+

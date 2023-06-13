@@ -1,5 +1,9 @@
+import json
+import hashlib
+import urllib.parse
 
-from flask import Flask, render_template, request, redirect, jsonify, session
+import itsdangerous
+from flask import Flask, render_template, request, redirect, jsonify, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 import folium
 import datetime
@@ -11,7 +15,8 @@ import secrets
 import locale
 from datetime import timedelta
 from sqlalchemy import func
-
+from collections import Counter
+from dateutil import parser
 
 app = Flask(__name__, static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@127.0.0.1:5432/CabMed'
@@ -110,8 +115,30 @@ pipeline = joblib.load('model/pipeline.pkl')
 dabadoc_doctors = pd.read_excel("DabaDoc_Abonnee.xlsx", engine='openpyxl')
 listes_rdv = pd.read_excel("list_rdv_total.xlsx", engine='openpyxl')
 
+
+
+def generate_token(text):
+    signer = itsdangerous.TimestampSigner(app.secret_key)
+    return signer.sign(text)
+
+# Verify and extract the text from the signed token
+def extract_text(token):
+    signer = itsdangerous.TimestampSigner(app.secret_key)
+    try:
+        return signer.unsign(token)
+    except itsdangerous.BadSignature:
+        return None
+
+
+def most_common_string(strings):
+    counter = Counter(strings)
+    most_common = counter.most_common(1)
+    if most_common:
+        return most_common[0][0]
+    else:
+        return None
 def get_list_speciality(text):
-    predicted_speciality = pipeline.predict([text])[0]
+
     # Generate predictions or probabilities for each class
     probabilities = pipeline.predict_proba([text])
     # Get the probability values for each class
@@ -308,7 +335,7 @@ def generate_calendar(month , year):
 
 @app.route('/')
 def redirect_to_patient():
-    return redirect('/login/patient')
+    return render_template('home.html')
 
 @app.route('/patient',methods=['POST','GET'])
 def index():
@@ -321,13 +348,22 @@ def index():
         date_selectionne= request.form['date']
 
         heure_selectionne = request.form['heure']
-        latitude=float(request.form['lat'])
-        longetude=float(request.form['long'])
+        error=0
+        if(request.form['lat']=="" ):
+            error = 1
+        if(description==""):
+            error = 1
+        if(date_selectionne==""):
+            error = 1
+        if(heure_selectionne==""):
+            error = 1
+
+
         #ville_selected=request.form['ville']
         ville_selected = ""
 
         verification = description.split(" ")
-        if len(verification)< 10:
+        if error==1 :
             latitude = 33.589886
             longitude = -7.603869
             lat, lon = latitude, longitude
@@ -336,7 +372,7 @@ def index():
             map_html = localisation(lat, lon)
             now = datetime.datetime.now()
             month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month,now.year)
-            message = "le longeur de Texte n'est pas favorable merci de bien remplir le champs"
+            message = "Merci de remplir tous les champs"
             locale.setlocale(locale.LC_TIME, 'fr_FR')
             month_name = calendar.month_name[month]
             translated_month_name = month_name.capitalize()
@@ -349,6 +385,8 @@ def index():
                                    weeks=weeks, map_html=map_html,message=message)
 
         else:
+            latitude = float(request.form['lat'])
+            longetude = float(request.form['long'])
 
             date=""
             for i in date_selectionne.split("-"):
@@ -486,10 +524,13 @@ def index():
                     session['id_med']=id_me
                     session['lang'] = longetude
                     session['lat'] = latitude
+
                     session['description_maladie']=description
+
                     session['Date_rdv']=date_selectionne+" "+heure_selectionne
                     session['doc_recomandé']=all_recmanded.to_json()
                     session['specialite']=predicted_speciality
+                    print("@@@@@@@@@@@ ", session['lang'])
                     doctor = Doctor.query.filter_by(id_med=id_me).first()
                     rating= doctor.rating
                     specialite_med= Avoir.query.filter_by(id_med=id_me).all()
@@ -504,6 +545,8 @@ def index():
                                            map_html=map_html ,specialite=predicted_speciality,doctor_name=name,
                                            ville=ville,adresse= adresse,telephone=tele, rating=rating,
                                            specialite_med=specialite_list,recamanded_meds= all_recmanded[1:4])'''
+                   
+
                     return redirect('/rendez_vous/'+id_me)
             except Exception as e :
                 print(e)
@@ -528,6 +571,10 @@ def index():
 
 
     else:
+        try:
+            session['email']
+        except Exception as e:
+            return redirect('/login/patient')
 
         try:
             now = datetime.datetime.now()
@@ -561,12 +608,12 @@ def index():
 @app.route('/rendez_vous/<int:id_medcin>', methods=['GET', 'POST'])
 def rendez_vous_page(id_medcin):
 
-
+    #description= session['description_maladie_1']+session['description_maladie_2']
     longetude=session['lang']
-    latitude=session['lat']
-    #description=session['description_maladie']
-    predicted_speciality=session['specialite']
 
+    latitude=session['lat']
+    description=session['description_maladie']
+    predicted_speciality=session['specialite']
     all_recmanded=pd.read_json(session['doc_recomandé'])
     all_recmanded=all_recmanded[all_recmanded['ID']!=id_medcin]
     doctor = Doctor.query.filter_by(id_med=id_medcin).first()
@@ -584,12 +631,12 @@ def rendez_vous_page(id_medcin):
         specialite_list.append(spe.specialte_rel.specialite)
 
     all_recmanded['distance'] = all_recmanded['distance'].astype(int)
-    print("this ", all_recmanded[1:4].columns)
+    print("this ", all_recmanded[0:3].columns)
 
     return render_template('rendez_vous.html',
                            map_html=map_html, specialite=predicted_speciality, doctor_name=name,
                            ville=ville, adresse=adresse, telephone=tele, rating=rating,
-                           specialite_med=specialite_list, recamanded_meds=all_recmanded[1:4])
+                           specialite_med=specialite_list, recamanded_meds=all_recmanded[:4])
 
 
 
@@ -603,6 +650,7 @@ def medcin():
         session['id_doc']
     except Exception as e:
         return redirect('/login/medcin')
+        #return redirect('/med/dashboard')
 
     rendezvous_data = RendezVous.query.filter_by(id_med=session['id_doc']).order_by(
         RendezVous.date_rdv.desc()).all()
@@ -651,12 +699,12 @@ def medcin():
                     formatted_week.append({'day': day, 'has_rendezvous': False})
         weeks.append(formatted_week)
 
-
-    return render_template('medcin.html', weeks=weeks, month=month, year=year, prev_month=prev_month,
+    return redirect('/med/dashboard')
+    '''return render_template('medcin.html', weeks=weeks, month=month, year=year, prev_month=prev_month,
                            prev_year=prev_year, next_month=next_month, next_year=next_year,
                            rendezvous_data=rendezvous_data,
                            speciality_percent=speciality_percent,full_name=full_name, id_patient=rendezvous_data[0].id_patient,
-                           map_html=map_html)
+                           map_html=map_html)'''
 
 
 @app.route('/medcin/<int:id_patient>', methods=['GET'])
@@ -982,10 +1030,278 @@ def rendez_vous():
                                prev_month=prev_month, prev_year=prev_year,
                                next_month=next_month, next_year=next_year,month_name=translated_month_name,
                                weeks=weeks, map_html=map_html, message="Il y a un probleme")
-@app.route('/test')
-def test():
-    return render_template('admin.html')
 
+
+@app.route('/med/dashboard')
+def dashboard():
+    try:
+        session['id_doc']
+    except Exception as e:
+        return redirect('/login/medcin')
+    map_html = doc_loca()
+    rendezvous_data = RendezVous.query.filter_by(id_med=session['id_doc']).order_by(
+        RendezVous.date_rdv.desc()).all()
+    list_spec=[]
+    list_date_rdv = []
+    for data in rendezvous_data:
+        list_spec.append(pipeline.predict([data.description_maladie])[0])
+
+        locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+
+
+        date_obj = str(data.date_rdv)[5:7]
+
+        name=calendar.month_name[int(date_obj)]
+        translated_month_name = name.capitalize()
+        list_date_rdv.append(translated_month_name)
+
+
+
+
+
+
+    patient_nbr=len(RendezVous.query.filter_by(id_med=session['id_doc']).distinct(RendezVous.id_patient).all())
+
+    rendezvous_nbr=len(rendezvous_data)
+    medcin_name= Doctor.query.filter_by(id_med=session['id_doc']).first().name
+    month_name=most_common_string(list_date_rdv)
+
+
+
+
+
+
+    return render_template('dashboard.html', active='Dashboard', map_html=map_html, nom=medcin_name,
+                           rdv_nbr= rendezvous_nbr,patient_nbr=patient_nbr,most_spec=most_common_string(list_spec)
+                           ,month_name=month_name)
+
+
+@app.route('/med/patients')
+def patients_page():
+    try:
+        session['id_doc']
+    except Exception as e:
+        return redirect('/login/medcin')
+
+
+    rendezvous_data = RendezVous.query.filter_by(id_med=session['id_doc']).order_by(
+        RendezVous.date_rdv.desc()).all()
+    # Fetch patient names for each RendezVous record
+    rendezvous_dates = {}
+    for rendezvous in rendezvous_data:
+        date = rendezvous.date_rdv.date()
+        if date not in rendezvous_dates:
+            rendezvous_dates[date] = []
+        rendezvous_dates[date].append(rendezvous)
+
+    speciality_percent = get_list_speciality(rendezvous_data[0].description_maladie)[:4]
+    full_name = rendezvous_data[0].patient_rel.nom + " " + rendezvous_data[0].patient_rel.prenom
+    age= rendezvous_data[0].patient_rel.age
+    adresse = rendezvous_data[0].patient_rel.adresse
+    telephone = rendezvous_data[0].patient_rel.telephone
+    sexe = rendezvous_data[0].patient_rel.sexe
+
+
+    return render_template('Patients_admin.html', active='Patients',age=age,
+                           full_name=full_name,speciality_percent=speciality_percent,
+                           sexe=sexe, telephone=telephone,adresse=adresse,rendezvous_data=rendezvous_data
+                            ,id_patient = rendezvous_data[0].id_patient,
+                           )
+
+@app.route('/med/patients/<int:id_patient>', methods=['GET'])
+def patient_with_id(id_patient):
+    # Handle the /medcin request with id_patient parameter
+    # Your logic here
+    try:
+        session['id_doc']
+    except Exception as e:
+        return redirect('/login/medcin')
+
+
+
+
+    try:
+
+        # Organize the rendezvous dates into a structure that aligns with the calendar template
+        rendezvous_data = RendezVous.query.filter_by(id_med=session['id_doc']).order_by(
+            RendezVous.date_rdv.desc()).all()
+        # Fetch patient names for each RendezVous record
+        rendezvous_dates = {}
+        for rendezvous in rendezvous_data:
+            date = rendezvous.date_rdv.date()
+            if date not in rendezvous_dates:
+                rendezvous_dates[date] = []
+            rendezvous_dates[date].append(rendezvous)
+        selected_patient = RendezVous.query.filter_by(id_med=session['id_doc'], id_patient=id_patient).first()
+
+
+
+        full_name = selected_patient.patient_rel.nom + " " + selected_patient.patient_rel.prenom
+        age = selected_patient.patient_rel.age
+        adresse = selected_patient.patient_rel.adresse
+        telephone = selected_patient.patient_rel.telephone
+        sexe = selected_patient.patient_rel.sexe
+
+        speciality_percent = get_list_speciality(selected_patient.description_maladie)[:4]
+        return render_template('Patients_admin.html', active='Patients', age=age,
+                               full_name=full_name, speciality_percent=speciality_percent,
+                               sexe=sexe, telephone=telephone, adresse=adresse, rendezvous_data=rendezvous_data
+                               , id_patient=id_patient,
+                               )
+    except Exception as e :
+        return redirect("/med/patients")
+
+@app.route('/med/rendez-vous')
+def rdv_page():
+    try:
+        session['id_doc']
+    except Exception as e:
+        return redirect('/login/medcin')
+
+    try:
+        now = datetime.datetime.now()
+        month = int(request.args.get('month', now.month))
+        year = int(request.args.get('year', now.year))
+        rendezvous_data = RendezVous.query.filter_by(id_med=session['id_doc']).order_by(
+            RendezVous.date_rdv.desc()).all()
+        # Fetch patient names for each RendezVous record
+        rendezvous_dates = {}
+        for rendezvous in rendezvous_data:
+            date = rendezvous.date_rdv.date()
+            if date not in rendezvous_dates:
+                rendezvous_dates[date] = []
+            rendezvous_dates[date].append(rendezvous)
+
+
+        month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(month, year)
+        cal = calendar.monthcalendar(year, month)
+        # Organize the rendezvous dates into a structure that aligns with the calendar template
+
+        weeks = []
+        for week in cal:
+
+            formatted_week = []
+            for day in week:
+
+                if day == 0:
+                    formatted_week.append('')
+                else:
+                    date_to_check = datetime.date(year, month, day)
+
+                    if date_to_check in rendezvous_dates:
+                        appointments = rendezvous_dates[date_to_check]
+                        appointments_info = []
+                        for appointment in appointments:
+                            patient_name = appointment.patient_rel.nom + " " + appointment.patient_rel.prenom
+                            rdv_temps = appointment.date_rdv.time()
+                            rdv_temps_str = rdv_temps.strftime('%H:%M')
+
+                            appointments_info.append({'patient_name': patient_name, 'temps': rdv_temps_str})
+
+                        formatted_week.append({'day': day, 'has_rendezvous': True, 'appointments': appointments_info})
+
+                    else:
+                        formatted_week.append({'day': day, 'has_rendezvous': False})
+            weeks.append(formatted_week)
+        locale.setlocale(locale.LC_TIME, 'fr_FR')
+        month_name = calendar.month_name[month]
+        translated_month_name = month_name.capitalize()
+
+        return render_template('Rdv_admin.html', active='Rendez-vous', weeks=weeks, month=month,
+                               year=year, prev_month=prev_month,
+                               prev_year=prev_year, next_month=next_month,
+                               next_year=next_year, month_name=translated_month_name, )
+    except Exception as e:
+
+        rendezvous_data = RendezVous.query.filter_by(id_med=session['id_doc']).order_by(
+            RendezVous.date_rdv.desc()).all()
+        # Fetch patient names for each RendezVous record
+        rendezvous_dates = {}
+        for rendezvous in rendezvous_data:
+            date = rendezvous.date_rdv.date()
+            if date not in rendezvous_dates:
+                rendezvous_dates[date] = []
+            rendezvous_dates[date].append(rendezvous)
+
+        now = datetime.datetime.now()
+        month, year, prev_month, prev_year, next_month, next_year, weeks = generate_calendar(now.month, now.year)
+        cal = calendar.monthcalendar(year, month)
+        # Organize the rendezvous dates into a structure that aligns with the calendar template
+
+        weeks = []
+        for week in cal:
+
+            formatted_week = []
+            for day in week:
+
+                if day == 0:
+                    formatted_week.append('')
+                else:
+                    date_to_check = datetime.date(year, month, day)
+
+                    if date_to_check in rendezvous_dates:
+                        appointments = rendezvous_dates[date_to_check]
+                        appointments_info = []
+                        for appointment in appointments:
+                            patient_name = appointment.patient_rel.nom + " " + appointment.patient_rel.prenom
+                            rdv_temps = appointment.date_rdv.time()
+                            rdv_temps_str = rdv_temps.strftime('%H:%M')
+
+                            appointments_info.append({'patient_name': patient_name, 'temps': rdv_temps_str})
+
+                        formatted_week.append({'day': day, 'has_rendezvous': True, 'appointments': appointments_info})
+
+                    else:
+                        formatted_week.append({'day': day, 'has_rendezvous': False})
+            weeks.append(formatted_week)
+        locale.setlocale(locale.LC_TIME, 'fr_FR')
+        month_name = calendar.month_name[month]
+        translated_month_name = month_name.capitalize()
+
+        return render_template('Rdv_admin.html', active='Rendez-vous', weeks=weeks, month=month,
+                               year=year, prev_month=prev_month,
+                               prev_year=prev_year, next_month=next_month,
+                               next_year=next_year, month_name=translated_month_name, )
+
+
+
+
+
+@app.route('/med/profile')
+def profile():
+    try:
+        session['id_doc']
+    except Exception as e:
+        return redirect('/login/medcin')
+    doctor = Doctor.query.filter_by(id_med=session['id_doc']).first()
+    doctor_name=doctor.name
+    doctor_adresse = doctor.adresse
+    doctor_tele = doctor.telephone
+    doctor_rating = doctor.rating
+    doctor_ville=doctor.ville_rel.ville
+    specialites= Avoir.query.filter_by(id_med=session['id_doc']).all()
+    user_location = 'toi'
+    lat, lon = doctor.latitude, doctor.longitude
+    # create a map with the location marker
+    map = folium.Map(location=[lat, lon], zoom_start=13)
+    folium.Marker([lat, lon], popup=user_location).add_to(map)
+    map_html = map._repr_html_()
+    return render_template('profil.html', active='Profile',doctor_name=doctor_name,doctor_adresse=doctor_adresse,
+                           doctor_rating=doctor_rating
+                        ,doctor_tele=doctor_tele,doctor_ville=doctor_ville,specialites=specialites, map_html=map_html
+
+                           )
+
+
+
+@app.route('/med/logout')
+def logout():
+    try:
+        session['id_doc']
+    except Exception as e:
+        return redirect('/login/medcin')
+    session.pop('id_doc', None)
+    return redirect('/login/medcin')
 
 
 if __name__ =='__main__':

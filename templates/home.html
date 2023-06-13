@@ -18,13 +18,7 @@
 {% block body %}
 
 <div class="container-fluid">
-	{% if message %}
-        <center>
-        <div id="Message_Error">{{ message }}</div>
-        </center>
-    {% else %}
-        <p></p>
-    {% endif %}
+
 		<div class="card card-login">
 			<div class="card-body">
 				<div class="row justify-content-center">
@@ -32,10 +26,9 @@
 						<div class="padding bg-primary text-center align-items-center d-flex">
 							<div id="particles-js"></div>
 							<div class="w-100">
-								<div class="logo mb-4">
-									<img src="{{ url_for('static', filename='imgs/kodinger.jpg') }}" alt="kodinger logo" class="img-fluid">
-								</div>
-								<h4 class="text-light mb-2">CabMed</h4>
+
+								<h4 class="text-light mb-2">Bienvenue
+								 dans CabMed</h4>
 								<p class="lead text-light"></p>
 								<!-- <button class="btn btn-block btn-icon btn-icon-google mb-3">
 									Login With Google
@@ -52,44 +45,30 @@
 					</div>
 					<div class="col-lg-6 col-md-12">
 						<div class="padding">
-							<h2><b>Login</b></h2>
-							<p class="lead">Avant de commencer, vous devez vous connecter ou vous inscrire si vous n'avez pas encore de compte.</p>
+							<h2><b>Choisir Votre Compte</b></h2>
+							<br><br><br><br>
 							<!-- <form autocomplete="off"> -->
-							{% if type == "med" %}
-								<form action="/login/medcin" method="post">
-									<div class="form-group">
-									<label for="username">Nom</label>
-							{% else %}
 
 							<form action="/login/patient" method="post">
+
 								<div class="form-group">
-									<label for="username">Email</label>
-							{% endif %}
+									<a href="/login/medcin">
+										<button  type="button" class="medcin_part">
+											<img  src="{{ url_for('static', filename='Icons/doc_part.png') }}" alt="Search"/>
+											Medcin
+										</button>
+									</a>
 
-									<input type="text" name="email" class="form-control" id="username" tabindex="1">
 								</div>
-								<div class="form-group">
-									<label class="d-block" for="password">
-										Mot de passe
+								<div class="form-group ">
+									<a href="/login/patient">
+										<button type="button" class="patient_part">
+											<img  src="{{ url_for('static', filename='Icons/person.png') }}" alt="Search"/>
+											Patient
 
-									</label>
-									<input type="password" name="password" class="form-control" id="password" tabindex="2">
-								</div>
-								<div class="form-group text-right">
-									<div class="float-left mt-2">
-										{% if type == "med" %}
+										</button>
+									</a>
 
-										<p></p>
-										{% else %}
-
-
-										<a href="/signin/patient">Create an account?</a>
-
-										{% endif %}
-									</div>
-									<button type="submit" class="btn btn-primary" tabindex="3">
-										Login
-									</button>
 								</div>
 							</form>
 						</div>

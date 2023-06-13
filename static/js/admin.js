@@ -1,6 +1,9 @@
-const currentDate = new Date();
-const year = currentDate.getFullYear();
+function changeIcon(imageElement, newImage) {
+      imageElement.src = newImage;
+    }
 
+
+/*
 var searchInput = document.getElementById('searchInput');
 var list = document.getElementById('myList').getElementsByTagName('li');
 var selectedItem = document.getElementById('selectedItem');
@@ -19,72 +22,7 @@ searchInput.addEventListener('input', function() {
     }
   }
 });
-
-for (var i = 0; i < list.length; i++) {
-  list[i].addEventListener('click', function() {
-    var selectedText = this.textContent;
-
-
-    // Remove 'selected' class from previously selected item
-    var prevSelected = document.querySelector('.selected');
-    if (prevSelected) {
-      prevSelected.classList.remove('selected');
-    }
-
-    // Add 'selected' class to the clicked item
-    this.classList.add('selected');
-  });
-}
-
-function handleDayClick(element, patients) {
-
-
-     var patientNamesElement = document.getElementById('patientName');
-     //var  temps document.getElementById('time').textContent ;
-     patientNamesElement.innerHTML = '';
-     if (patients.length > 0) {
-        // Process the appointments data
-        for (var i = 0; i < patients.length; i++) {
-            var appointment = patients[i];
-            var patientName = appointment.patient_name;
-            var time = appointment.temps;
-            // Do something with the appointment data
-            console.log("Patient Name: " + patientName);
-            console.log("Time: " + time);
-            var patientName = patients[i].patient_name;
-          // Create a new <p> element for each patient name and append it to the parent <p> tag
-             var pElement = document.createElement('p');
-             var tElement =document.createElement('p');
-              pElement.textContent = patientName;
-              tElement.textContent = time;
-              patientNamesElement.appendChild(pElement);
-              patientNamesElement.appendChild(tElement);
-        }
-    }
-
-
-  // Get the day value from the clicked element
-  var day = element.textContent;
-
-
-  // Check if the clicked day has a rendez-vous
-  var hasRendezvous = element.dataset.hasRendezvous;
-
-  if (hasRendezvous === 'true') {
-    // Retrieve the rendez-vous details using AJAX or other means
-    // In this example, we assume the rendez-vous details are stored in a JavaScript object
-
-  }
-
-
-
-    $('#rendezvousModal').show();
-    // Show the modal
-    $('.close').on('click', function() {
-
-    $('#rendezvousModal').hide();
-        });
-}
+*/
 
 
 
@@ -92,13 +30,8 @@ function handleDayClick(element, patients) {
 
 
 
-
-
-
-
-
-
-
+const currentDate = new Date();
+const year = currentDate.getFullYear();
 
 
 
@@ -207,6 +140,3 @@ $(document).ready(function () {
   // Update the bar graph with the current month and year
   updateBarGraph(currentMonth, currentYear);
 });
-
-
-

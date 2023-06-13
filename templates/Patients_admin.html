@@ -1,0 +1,116 @@
+{% extends 'med.html' %}
+
+{% block main%}
+<div class="main3">
+    <div class="grand_titre">
+        <h2><b> Votres Patients</b></h2>
+
+    </div>
+    <div class="patients_list">
+
+
+
+                <div class="search_section">
+
+                        <button class="icon" type="button" onclick="getLocation()"><img  src="{{ url_for('static', filename='Icons/chercher.png') }}" alt="Search"/></button>
+                        <input type="text" id="searchInput" placeholder="chercher le patient">
+                    </div>
+
+
+
+                <div class="scrollable-container">
+                  <div class="scrollable-content" id="myList">
+                      {% for rendezvous in rendezvous_data %}
+                            {% if rendezvous.patient_rel.id_patient == id_patient %}
+                                <a href="/med/patients/{{ rendezvous.patient_rel.id_patient }}" class="line">
+
+                                      <li class="clicked">
+                                            <h4><b>{{ rendezvous.patient_rel.nom }} {{ rendezvous.patient_rel.prenom }}</b></h4>
+                                            <p class="normal_text">{{ rendezvous.patient_rel.adresse }}</p>
+                                            <p class="normal_text">{{ rendezvous.patient_rel.age }}</p>
+                                        </li>
+
+                                  </a>
+                            {% else %}
+                               <a href="/med/patients/{{ rendezvous.patient_rel.id_patient }}" class="line">
+
+                                      <li class="not_clicked">
+                                            <h4><b>{{ rendezvous.patient_rel.nom }} {{ rendezvous.patient_rel.prenom }}</b></h4>
+                                            <p class="normal_text">{{ rendezvous.patient_rel.adresse }}</p>
+                                            <p class="normal_text">{{ rendezvous.patient_rel.age }}</p>
+                                        </li>
+
+                                  </a>
+                            {% endif %}
+                      {% endfor %}
+
+                  </div>
+                </div>
+
+    </div>
+
+    <div class="details_patients">
+        <div class="infos_general">
+            <h3><b>{{ full_name }}</b></h3>
+        <div class="infos">
+            <div>
+                <p><b>Age</b></p>
+                 <p><b>Adresse</b></p>
+                <p><b>Sexe</b></p>
+                <p><b>Telephone</b></p>
+
+            </div>
+             <div>
+                <p>{{ age }}</p>
+                 <p>{{ adresse }}</p>
+                <p>{{ sexe }}</p>
+                <p>{{ telephone }}</p>
+
+            </div>
+
+        </div>
+        <div>
+            <p><b>Description de maladie</b></p>
+            {% if description_patient %}
+               <p class="description">{{ description_patient }}</p>
+            {% else %}
+                <p class="description">{{ rendezvous_data[0].description_maladie }}</p>
+             {% endif %}
+
+
+        </div>
+
+        </div>
+        <div class="specialities">
+            {% for index, row in speciality_percent.iterrows() %}
+
+            <div class="spe">
+                 <p><b>{{ row['Label'] }}</b></p>
+                    {% set url = url_for('static', filename='icons/'+row['Label']+'.png') %}
+                    <img  src="{{ url }}" class="profile-image" onerror="this.onerror=null; this.src='{{ url_for('static', filename='icons/ico.png') }}';"alt="Doctor Profile Image">
+                    <br><br>
+                <p><b>{{ row['Proba'] }} %</b></p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+
+
+    </div>
+
+
+
+</div>
+
+{% endblock%}
+
+{% block js%}
+    <script src="{{ url_for('static', filename='js/patients_admin.js') }}"></script>
+
+
+
+
+{% endblock %}

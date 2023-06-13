@@ -1,0 +1,121 @@
+{% extends 'med.html' %}
+
+{% block main%}
+<!--<div class="main4">
+    <div class="">
+
+
+    </div>
+
+    <div class="profil_data">
+        <div class="doc_name">
+            <h2>{{doctor_name}}</h2>
+             <div class="rat">
+                <img src="{{ url_for('static', filename='Icons/star.png') }}"
+                                 class="star">
+                <p>{{doctor_rating}} Rating</p>
+
+            </div>
+
+
+        </div>
+
+
+        <div id="speciality_names">
+            {% for row in specialites%}
+                <p class="specialty_names">{{row.specialte_rel.specialite}}</p>
+            {% endfor%}
+
+        </div>
+        <br>
+
+
+        <div class="in">
+            <div>
+                <p><b>Adresse</b></p>
+                 <p><b>Telephone</b></p>
+                 <p><b>Ville</b></p>
+
+
+            </div>
+            <div>
+                <p class="adresse">{{doctor_adresse}}</p>
+                <p>{{doctor_tele}}</p>
+                <p>{{doctor_ville}}</p>
+
+
+            </div>
+        </div>
+
+
+    </div>
+     <div class="">
+
+
+    </div>
+
+
+
+
+</div>-->
+
+
+        <div class="contact-info contain">
+            <div class="container">
+            <div class="profile-header">
+
+              <div class="profile-info">
+                <h1 >{{doctor_name}}</h1>
+
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Contact Information</div>
+              <div class="section-content">
+                <div class="contact-info">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <p>{{doctor_adresse}}</p>
+                </div>
+                <div class="contact-info">
+                  <i class="fas fa-envelope"></i>
+                  <p>{{doctor_ville}}</p>
+                </div>
+                  <i class="fas fa-phone"></i>
+                  <p>{{doctor_tele}}</p>
+                </div>
+
+              </div>
+        </div>
+
+            <div class="section map_section">
+              <div class="section-title">Localisation</div>
+              {{ map_html | safe }}
+            </div>
+
+            <div class="section spex">
+              <div class="section-title">Specialties</div>
+
+                <div class="specialties">
+                    {% for row in specialites%}
+                        <span>{{row.specialte_rel.specialite}}</span>
+                    {% endfor%}
+
+                </div>
+
+            </div>
+  </div>
+
+
+
+
+{% endblock%}
+
+{% block js%}
+
+    <script src="{{ url_for('static', filename='js/rdv_admin.js') }}"></script>
+
+
+
+
+{% endblock %}
