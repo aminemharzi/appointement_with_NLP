@@ -609,10 +609,13 @@ def index():
 def rendez_vous_page(id_medcin):
 
     #description= session['description_maladie_1']+session['description_maladie_2']
+    try:
+        session['email']
+    except Exception as e:
+        return redirect('/login/patient')
     longetude=session['lang']
 
     latitude=session['lat']
-    description=session['description_maladie']
     predicted_speciality=session['specialite']
     all_recmanded=pd.read_json(session['doc_recomandé'])
     all_recmanded=all_recmanded[all_recmanded['ID']!=id_medcin]
